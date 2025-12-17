@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  web:
+    build: ./web
+    container_name: lego_web
+    ports:
+      - "8000:80"
+    depends_on:
+      - api
+
+  api:
+    build: ./api
+    container_name: lego_api
+    ports:
+      - "8001:80"
+    depends_on:
+      - database
+
+  database:
+    image: mysql:8.0
+    container_name: lego_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lego_db
+      MYSQL_USER: lego
+      MYSQL_PASSWORD: lego
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: database
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "8080:80"
+
+volumes:
+  db_data:
