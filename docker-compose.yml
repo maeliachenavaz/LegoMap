@@ -16,6 +16,10 @@ services:
     container_name: lego_api
     ports:
       - "8001:80"
+    volumes:
+      - ./api:/var/www/html
+    env_file:
+      - ./api/.env
     depends_on:
       - database
 
