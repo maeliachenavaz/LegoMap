@@ -1,0 +1,135 @@
+{# templates/base.html.twig #}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ title | default('Dashboard') }}{% endblock %} - LEGO Map</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        *:focus-visible {
+            outline: 3px solid #1a365d !important;
+            outline-offset: 2px;
+        }
+        @media (max-width: 767px) {
+            #mobile-menu.hidden { display: none; }
+            #mobile-menu.flex { display: flex; }
+        }
+    </style>
+    {% block stylesheets %}{% endblock %}
+</head>
+<body class="bg-yellow-400 min-h-screen font-sans text-gray-900">
+
+{# 1. Lien d'évitement (Accessibilité clavier) #}
+<a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-white text-red-700 p-4 z-50 rounded-lg shadow-lg font-bold">
+    Aller au contenu principal
+</a>
+
+{# 2. Header / Navigation #}
+<header class="bg-red-700 text-white shadow-lg relative" role="banner">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+        <div class="flex justify-between items-center">
+
+            <div class="flex items-center gap-8">
+                <a href="/" class="text-2xl font-bold hover:underline" aria-label="LEGO Map - Retour à l'accueil">
+                    LEGO Map
+                </a>
+
+                <nav class="hidden md:block" aria-label="Menu principal">
+                    <ul class="flex gap-4">
+                        <li>
+                            <a href="/"
+                               class="px-3 py-2 rounded-lg hover:bg-red-800 transition block font-medium {{ block('title') == 'Accueil' ? 'bg-red-900 ring-2 ring-white' : '' }}"
+                               {% if block('title') == 'Accueil' %}aria-current="page"{% endif %}>
+                                Boutiques
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/users"
+                               class="px-3 py-2 rounded-lg hover:bg-red-800 transition block font-medium {{ block('title') == 'Utilisateurs' ? 'bg-red-900 ring-2 ring-white' : '' }}"
+                               {% if block('title') == 'Utilisateurs' %}aria-current="page"{% endif %}>
+                                Utilisateurs
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="hidden md:block">
+                <a href="/logout" class="bg-white text-red-800 font-bold px-4 py-2 rounded-lg hover:bg-gray-100 transition border-2 border-transparent">
+                    Déconnexion
+                </a>
+            </div>
+
+            {# Bouton Burger Mobile #}
+            <button id="burger-btn"
+                    class="md:hidden p-2 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-white transition"
+                    aria-expanded="false"
+                    aria-controls="mobile-menu"
+                    aria-label="Ouvrir le menu">
+                <svg id="burger-icon" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+                <svg id="close-icon" class="w-8 h-8 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        {# Menu Mobile #}
+        <nav id="mobile-menu"
+             class="hidden flex-col gap-4 mt-4 pb-4 md:hidden border-t border-red-600 pt-4"
+             aria-label="Menu mobile">
+            <ul class="flex flex-col gap-2">
+                <li>
+                    <a href="/" class="px-4 py-3 rounded-lg hover:bg-red-800 transition block font-bold {{ title == 'Accueil' ? 'bg-red-900' : '' }}" {% if title == 'Accueil' %}aria-current="page"{% endif %}>
+                        🛒 Stores
+                    </a>
+                </li>
+                <li>
+                    <a href="/users" class="px-4 py-3 rounded-lg hover:bg-red-800 transition block font-bold {{ title == 'Utilisateurs' ? 'bg-red-900' : '' }}" {% if title == 'Utilisateurs' %}aria-current="page"{% endif %}>
+                        👥 Utilisateurs
+                    </a>
+                </li>
+            </ul>
+            <a href="/logout" class="bg-white text-red-800 text-center font-bold px-4 py-3 rounded-lg">
+                Déconnexion
+            </a>
+        </nav>
+    </div>
+</header>
+
+{# 3. Contenu Principal #}
+<main id="main-content" class="p-8 max-w-7xl mx-auto" tabindex="-1">
+    {% block body %}{% endblock %}
+</main>
+
+{# 4. Footer (Optionnel mais recommandé pour l'accessibilité) #}
+<footer class="p-8 text-center text-red-900 font-medium" role="contentinfo">
+    <p>&copy; {{ "now"|date("Y") }} - Dashboard LEGO Map</p>
+</footer>
+
+<script>
+    // Logique du menu burger
+    const burgerBtn = document.getElementById('burger-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const burgerIcon = document.getElementById('burger-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    if (burgerBtn) {
+        burgerBtn.addEventListener('click', () => {
+            const isExpanded = burgerBtn.getAttribute('aria-expanded') === 'true';
+            burgerBtn.setAttribute('aria-expanded', !isExpanded);
+            burgerBtn.setAttribute('aria-label', isExpanded ? "Ouvrir le menu" : "Fermer le menu");
+
+            mobileMenu.classList.toggle('hidden');
+            mobileMenu.classList.toggle('flex');
+            burgerIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        });
+    }
+</script>
+{% block javascripts %}{% endblock %}
+</body>
+</html>

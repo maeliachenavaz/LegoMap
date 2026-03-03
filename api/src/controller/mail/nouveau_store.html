@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEGO Map - Nouveau Store</title>
+    <style>
+        /* Styles pour le mobile */
+        @media screen and (max-width: 600px) {
+            .container {
+                width: 100% !important;
+                padding: 10px !important;
+            }
+            .content {
+                padding: 20px !important;
+            }
+            .button {
+                width: 100% !important;
+                display: block !important;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f3f4f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f3f4f6; padding: 20px 0;">
+    <tr>
+        <td align="center">
+
+            <table border="0" cellpadding="0" cellspacing="0" width="600" class="container" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; border: 4px solid #991b1b; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+
+                <tr>
+                    <td align="center" style="background-color: #991b1b; padding: 25px;">
+                        <h1 style="color: #ffffff; margin: 0; font-size: 26px; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">LEGO Map</h1>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="content" style="padding: 40px;">
+                        <h2 style="color: #991b1b; margin-top: 0; font-size: 22px;">Nouveau Store Enregistré !</h2>
+                        <p style="color: #4b5563; font-size: 16px; line-height: 1.6; margin-bottom: 25px;">
+                            Bonjour, un nouveau store vient d'être ajouté à la plateforme. Voici les détails :
+                        </p>
+
+                        <table border="0" cellpadding="20" cellspacing="0" width="100%" style="background-color: #f9fafb; border-radius: 12px; border: 1px solid #e5e7eb;">
+                            <tr>
+                                <td>
+                                    <h3 style="margin: 0 0 10px 0; color: #111827; font-size: 20px;">{{nom}}</h3>
+                                    <p style="color: #6b7280; font-style: italic; margin: 0 0 20px 0; font-size: 15px;">"{{description}}"</p>
+
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                        <tr>
+                                            <td width="40%" style="padding: 10px 0; color: #374151; border-bottom: 1px solid #edf2f7; font-weight: bold; font-size: 14px;">Note :</td>
+                                            <td style="padding: 10px 0; color: #b45309; border-bottom: 1px solid #edf2f7; font-weight: bold; font-size: 14px;">{{avis}} / 5 ⭐</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 10px 0; color: #374151; border-bottom: 1px solid #edf2f7; font-weight: bold; font-size: 14px;">Date :</td>
+                                            <td style="padding: 10px 0; border-bottom: 1px solid #edf2f7; font-size: 14px; color: #4b5563;">{{date}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 10px 0; color: #374151; border-bottom: 1px solid #edf2f7; font-weight: bold; font-size: 14px;">Contact :</td>
+                                            <td style="padding: 10px 0; border-bottom: 1px solid #edf2f7; font-size: 14px; color: #4b5563;">{{contactNom}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 10px 0; color: #374151; font-weight: bold; font-size: 14px; vertical-align: top;">Adresse :</td>
+                                            <td style="padding: 10px 0; font-size: 13px; color: #6b7280; line-height: 1.4;">{{adresse}}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 35px;">
+                            <tr>
+                                <td align="center">
+                                    <a href="http://localhost:8000/store/preview/{{id}}" class="button" style="background-color: #991b1b; color: #ffffff; padding: 16px 30px; text-decoration: none; border-radius: 10px; font-weight: bold; display: inline-block; font-size: 16px; transition: background-color 0.3s;">
+                                        Voir la fiche du store
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td align="center" style="background-color: #fef3c7; padding: 20px; border-top: 1px solid #fde68a;">
+                        <p style="margin: 0; color: #92400e; font-size: 12px; font-weight: bold;">
+                            Ceci est un message automatique de LEGO Map
+                        </p>
+                    </td>
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+</table>
+</body>
+</html>

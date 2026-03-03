@@ -5,14 +5,63 @@ namespace api\controller;
 use api\model\Store;
 use api\service\AuthService;
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 class StoreController
 {
+    /* =========================
+       REVERSE GEOCODING : récupère la ville depuis lat/lon
+    ========================== */
+    private static function getCityFromCoordinates(float $lat, float $lon): ?string
+    {
+        $url = "https://nominatim.openstreetmap.org/reverse?format=json&lat={$lat}&lon={$lon}&zoom=10&addressdetails=1";
+        $options = [
+            "http" => [
+                "header" => "User-Agent: lego-app\r\n"
+            ]
+        ];
+        $context = stream_context_create($options);
+        $response = @file_get_contents($url, false, $context);
+
+        if (!$response) return null;
+
+        $data = json_decode($response, true);
+
+        return $data['address']['city']
+            ?? $data['address']['town']
+            ?? $data['address']['village']
+            ?? null;
+    }
+
     public static function create(): void
     {
         $auth = AuthService::checkAndRefresh();
         $userId = $auth['user_id'];
 
-        $data = json_decode(file_get_contents('php://input'), true);
+        $data = $_POST;
+
+        if (empty($data)) {
+            $data = json_decode(file_get_contents('php://input'), true) ?? [];
+        }
+
+        $required = ['nom', 'description', 'date', 'avis', 'latitude', 'longitude', 'contactNom', 'contactEmail'];
+
+        foreach ($required as $field) {
+            if (!isset($data[$field]) || empty($data[$field])) {
+                http_response_code(400);
+                echo json_encode(['error' => "Paramètre manquant : $field"]);
+                return;
+            }
+        }
+
+        // 4. Gestion de la Photo (Fichier)
+        $photoBase64 = null;
+        if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+            $type = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+            $data_img = file_get_contents($_FILES['photo']['tmp_name']);
+            $photoBase64 = base64_encode($data_img);
+        }
 
         if (!isset($data['nom'], $data['description'], $data['date'], $data['avis'], $data['latitude'], $data['longitude'], $data['contactNom'], $data['contactEmail'], $data['photo'])) {
             http_response_code(400);
@@ -35,6 +84,7 @@ class StoreController
         $id = $store->create();
 
         if ($id) {
+            self::sendStoreCreatedEmail($store);
             http_response_code(201);
             echo $store->toJson();
         } else {
@@ -46,7 +96,20 @@ class StoreController
     public static function getStore(string $id): void
     {
         AuthService::checkAndRefresh();
+        $store = Store::getById($id);
 
+        if (!$store) {
+            http_response_code(404);
+            echo json_encode(['error' => 'Store non trouvé']);
+            return;
+        }
+
+        http_response_code(200);
+        echo $store->toJson();
+    }
+
+    public static function getStorePreview(string $id): void
+    {
         $store = Store::getById($id);
 
         if (!$store) {
@@ -62,9 +125,16 @@ class StoreController
     public static function getAll(): void
     {
         AuthService::checkAndRefresh();
-
         $stores = Store::getAll();
-        $result = array_map(fn($store) => json_decode($store->toJson(), true), $stores);
+        $result = [];
+
+        foreach ($stores as $store) {
+            $arr = json_decode($store->toJson(), true);
+            if (empty($arr['ville'])) {
+                $arr['ville'] = self::getCityFromCoordinates($arr['latitude'], $arr['longitude']);
+            }
+            $result[] = $arr;
+        }
 
         http_response_code(200);
         echo json_encode($result);
@@ -74,9 +144,16 @@ class StoreController
     {
         $auth = AuthService::checkAndRefresh();
         $userId = $auth['user_id'];
-
         $stores = Store::getByCreatorId($userId);
-        $result = array_map(fn($store) => json_decode($store->toJson(), true), $stores);
+
+        $result = [];
+        foreach ($stores as $store) {
+            $arr = json_decode($store->toJson(), true);
+            if (empty($arr['ville'])) {
+                $arr['ville'] = self::getCityFromCoordinates($arr['latitude'], $arr['longitude']);
+            }
+            $result[] = $arr;
+        }
 
         http_response_code(200);
         echo json_encode($result);
@@ -91,21 +168,23 @@ class StoreController
         $userId = $auth['user_id'];
 
         $store = Store::getById($id);
-
         if (!$store) {
             http_response_code(404);
             echo json_encode(['error' => 'Store non trouvé']);
             return;
         }
 
-        // Seul le créateur peut modifier
         if ($store->getCreator_id() !== $userId) {
             http_response_code(403);
             echo json_encode(['error' => 'Accès interdit']);
             return;
         }
 
-        $data = json_decode(file_get_contents('php://input'), true);
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+
+        error_log('Contenu brut reçu: ' . $json);
+        error_log('Data décodée: ' . print_r($data, true));
 
         if (isset($data['nom'])) $store->setNom($data['nom']);
         if (isset($data['description'])) $store->setDescription($data['description']);
@@ -119,7 +198,7 @@ class StoreController
 
         if ($store->update()) {
             http_response_code(200);
-            echo $store->toJson();
+            echo $store->toJson(); // Pas besoin de re-requêter la DB ici
         } else {
             http_response_code(500);
             echo json_encode(['error' => 'Erreur lors de la mise à jour']);
@@ -135,14 +214,12 @@ class StoreController
         $userId = $auth['user_id'];
 
         $store = Store::getById($id);
-
         if (!$store) {
             http_response_code(404);
             echo json_encode(['error' => 'Store non trouvé']);
             return;
         }
 
-        // Seul le créateur peut supprimer
         if ($store->getCreator_id() !== $userId) {
             http_response_code(403);
             echo json_encode(['error' => 'Accès interdit']);
@@ -155,6 +232,74 @@ class StoreController
         } else {
             http_response_code(500);
             echo json_encode(['error' => 'Erreur lors de la suppression']);
+        }
+    }
+
+    private static function sendStoreCreatedEmail(Store $store): void
+    {
+        $mail = new PHPMailer(true);
+
+        // --- REVERSE GEOCODING ---
+        $lat = $store->getLatitude();
+        $lon = $store->getLongitude();
+        $fullAddress = "Adresse non disponible";
+
+        $url = "https://nominatim.openstreetmap.org/reverse?format=json&lat={$lat}&lon={$lon}&zoom=18&addressdetails=1";
+        $options = ["http" => ["header" => "User-Agent: LegoMapApp/1.0\r\n"]];
+        $context = stream_context_create($options);
+        $response = @file_get_contents($url, false, $context);
+
+        if ($response) {
+            $data = json_decode($response, true);
+            $fullAddress = $data['display_name'] ?? $fullAddress;
+        }
+
+        try {
+            $mail->isSMTP();
+            $mail->Host = 'sandbox.smtp.mailtrap.io';
+            $mail->SMTPAuth = true;
+            $mail->Username = '9e3692aead233b';
+            $mail->Password = '6e84e0077f8f4d';
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+
+            // Expéditeur / destinataire
+            $mail->setFrom('no-reply@lego-app.com', 'Lego App');
+            $mail->addAddress('maelia.chenavaz@viacesi.fr', $store->getContactNom());
+
+            $templatePath = __DIR__ . '/mail/nouveau_store.html';
+
+            if (!file_exists($templatePath)) {
+                error_log("Template introuvable : " . $templatePath);
+                $message = "LEGO Map - Nouveau store créé : " . $store->getNom();
+            } else {
+                $message = file_get_contents($templatePath);
+
+                // Remplacement des placeholders
+                $placeholders = [
+                    '{{id}}'          => $store->getId(),
+                    '{{nom}}'          => $store->getNom(),
+                    '{{description}}'  => $store->getDescription(),
+                    '{{date}}'         => $store->getDate(),
+                    '{{avis}}'         => $store->getAvis(),
+                    '{{contactNom}}'   => $store->getContactNom(),
+                    '{{contactEmail}}' => $store->getContactEmail(),
+                    '{{adresse}}'     => $fullAddress
+                ];
+
+                $message = str_replace(array_keys($placeholders), array_values($placeholders), $message);
+            }
+
+            $mail->isHTML(true);
+            $mail->CharSet = 'UTF-8';
+            $mail->Encoding = 'base64';
+            $mail->Subject = 'LEGO Map - Nouveau store créé : ' . $store->getNom();
+            $mail->Body    = $message;
+            $mail->AltBody = "LEGO Map - Nouveau store créé : {$store->getNom()}";
+
+            $mail->send();
+        } catch (Exception $e) {
+            error_log("Erreur envoi mail Mailtrap : " . $mail->ErrorInfo);
         }
     }
 }

@@ -1,4 +1,20 @@
 <?php
+// =================================================================
+// 1. CONFIGURATION & HEADERS
+// =================================================================
+// ================= CORS CLEAN =================
+header("Access-Control-Allow-Origin: http://localhost:8000");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Credentials: true");
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+session_start();
+
 // Dans api/public/index.php
 
 $envPath = __DIR__ . '/../.env';
@@ -10,20 +26,6 @@ if (file_exists($envPath)) {
         $_ENV[trim($name)] = trim($value);
         putenv(trim($line)); // Optionnel, pour plus de compatibilité
     }
-}
-
-// =================================================================
-// 1. CONFIGURATION & HEADERS
-// =================================================================
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-
-// Gestion du Preflight CORS (pour les navigateurs)
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit;
 }
 
 // =================================================================
@@ -99,6 +101,16 @@ if ($path === '/logout' && $requestMethod === 'POST') {
     exit;
 }
 
+if ($path === '/users' && $requestMethod === 'GET') {
+    UserController::getAllUsers(); // On va créer cette méthode
+    exit;
+}
+
+if ($path === '/users' && $requestMethod === 'POST') {
+    UserController::addUser(); // On appelle la nouvelle méthode
+    exit;
+}
+
 // --- ROUTES STORES ---
 
 // 1. Liste de tous les stores
@@ -119,8 +131,19 @@ if ($path === '/stores/user' && $requestMethod === 'GET') {
     exit;
 }
 
+if (preg_match('#^/stores/preview/([\w-]+)$#', $path, $matches)) {
+    $id = $matches[1];
+    if ($requestMethod === 'GET') {
+        StoreController::getStorePreview($id);
+    } else {
+        http_response_code(405);
+        echo json_encode(['error' => 'Method Not Allowed']);
+    }
+    exit;
+}
+
 // 4. Opérations sur un store spécifique (ID)
-if (preg_match('#^/stores/(\w+)$#', $path, $matches)) {
+if (preg_match('#^/stores/([\w-]+)$#', $path, $matches)) {
     $id = $matches[1];
     switch ($requestMethod) {
         case 'GET':    StoreController::getStore($id); break;
@@ -133,15 +156,16 @@ if (preg_match('#^/stores/(\w+)$#', $path, $matches)) {
 
 
 // --- ROUTES USERS ---
-
-// Opérations sur un utilisateur spécifique (ID)
-if (preg_match('#^/users/(\w+)$#', $path, $matches)) {
+if (preg_match('#^/users/([\w-]+)$#', $path, $matches)) {
     $id = $matches[1];
     switch ($requestMethod) {
         case 'GET':    UserController::getUser($id); break;
         case 'PUT':    UserController::updateUser($id); break;
         case 'DELETE': UserController::deleteUser($id); break;
-        default:       http_response_code(405); echo json_encode(['error' => 'Method Not Allowed']); break;
+        default:
+            http_response_code(405);
+            echo json_encode(['error' => 'Method Not Allowed']);
+            break;
     }
     exit;
 }

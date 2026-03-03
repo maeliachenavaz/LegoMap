@@ -332,20 +332,20 @@ class Store
         $db = Database::getConnection();
 
         $stmt = $db->prepare("
-        UPDATE store SET
-            nom = :nom,
-            description = :description,
-            date = :date,
-            avis = :avis,
-            latitude = :latitude,
-            longitude = :longitude,
-            contact_nom = :contact_nom,
-            contact_email = :contact_email,
-            photo = :photo
+        UPDATE store SET 
+            nom = :nom, 
+            description = :description, 
+            date = :date, 
+            avis = :avis, 
+            latitude = :latitude, 
+            longitude = :longitude, 
+            contact_nom = :contact_nom, 
+            contact_email = :contact_email, 
+            photo = :photo 
         WHERE id = :id
     ");
 
-        return $stmt->execute([
+        $params = [
             ':id'            => $this->id,
             ':nom'           => $this->nom,
             ':description'   => $this->description,
@@ -356,7 +356,13 @@ class Store
             ':contact_nom'   => $this->contactNom,
             ':contact_email' => $this->contactEmail,
             ':photo'         => $this->photo,
-        ]);
+        ];
+
+        $success = $stmt->execute($params);
+
+        error_log("Update ID {$this->id} - Success: " . ($success ? 'Oui' : 'Non'));
+
+        return $success; // On retourne directement la variable, on ne ré-exécute pas !
     }
 
     public static function delete(string $id): bool

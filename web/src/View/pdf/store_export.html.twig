@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: sans-serif; color: #333; }
+        .header { background: #b91c1c; color: white; padding: 20px; text-align: center; }
+        .content { padding: 30px; }
+        .store-name { color: #b91c1c; font-size: 28px; border-bottom: 2px solid #eee; }
+        .info-grid { margin-top: 20px; width: 100%; }
+        .info-grid td { padding: 10px; border-bottom: 1px solid #eee; }
+        .label { font-weight: bold; color: #666; text-transform: uppercase; font-size: 12px; }
+        .photo { width: 100%; max-height: 300px; object-fit: cover; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>LEGO Map - Fiche Boutique</h1>
+</div>
+
+<div class="content">
+    {% if store.photo %}
+        <img src="{{ store.photo }}" class="photo" alt="photo de la boutique">
+    {% endif %}
+
+    <h2 class="store-name">{{ store.nom }}</h2>
+    <p>{{ store.description }}</p>
+
+    <table class="info-grid">
+        <tr>
+            <td class="label">Ouverture</td>
+            <td>{{ store.date }}</td>
+        </tr>
+        <tr>
+            <td class="label">Note Client</td>
+            <td>{{ store.avis }} / 5</td>
+        </tr>
+        <tr>
+            <td class="label">Contact</td>
+            <td>{{ store.contactNom }} ({{ store.contactEmail }})</td>
+        </tr>
+        <tr>
+            <td class="label">Adresse</td>
+            <td style="font-size: 14px; line-height: 1.4;">
+                {{ address }}
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

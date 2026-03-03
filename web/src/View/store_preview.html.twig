@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Aperçu - {{ store.nom }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #map { height: 300px; z-index: 1; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen p-4">
+
+<div class="max-w-3xl mx-auto bg-white shadow-2xl rounded-3xl overflow-hidden border-2 border-gray-100">
+
+    {# Image de couverture #}
+    <div class="w-full h-56 bg-gray-200">
+        {% if store.photo %}
+            <img src="{{ store.photo[:5] == 'data:' ? store.photo : 'data:image/jpeg;base64,' ~ store.photo }}"
+                 alt="{{ store.nom }}" class="w-full h-full object-cover">
+        {% else %}
+            <div class="w-full h-full flex items-center justify-center text-gray-400 italic">Aucune photo disponible</div>
+        {% endif %}
+    </div>
+
+    <div class="p-8">
+        <div class="flex justify-between items-start mb-6">
+            <div>
+                <h1 class="text-4xl font-black text-red-800">{{ store.nom }}</h1>
+                <p class="text-gray-500 font-medium">{{ store.date }}</p>
+            </div>
+            <div class="bg-amber-100 text-amber-700 px-4 py-2 rounded-2xl font-bold flex items-center gap-2">
+                {{ store.avis }} / 5 ★
+            </div>
+        </div>
+
+        <p class="text-gray-700 leading-relaxed mb-8 text-lg">
+            {{ store.description }}
+        </p>
+
+        {# Carte Interactive #}
+        <div class="mb-8">
+            <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">Localisation</h3>
+            <div id="map" class="rounded-2xl border-2 border-gray-100 shadow-inner"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+            <div class="bg-gray-50 p-4 rounded-xl">
+                <span class="block text-xs font-bold text-gray-400 uppercase">Contact</span>
+                <span class="text-gray-900 font-semibold">{{ store.contactNom }}</span>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-xl">
+                <span class="block text-xs font-bold text-gray-400 uppercase">Email</span>
+                <a href="mailto:{{ store.contactEmail }}" class="text-blue-600 font-semibold hover:underline">{{ store.contactEmail }}</a>
+            </div>
+        </div>
+
+        {# Actions #}
+        <div class="flex flex-col sm:flex-row gap-4">
+            <a href="/store/{{ store.id }}/pdf"
+               class="flex-1 text-center bg-red-800 text-white font-bold px-6 py-4 rounded-2xl hover:bg-red-900 transition shadow-lg shadow-red-200">
+                📥 Télécharger le PDF
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const lat = {{ store.latitude }};
+    const lon = {{ store.longitude }};
+    const map = L.map('map', { scrollWheelZoom: false }).setView([lat, lon], 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    L.marker([lat, lon]).addTo(map)
+        .bindPopup("<strong>{{ store.nom }}</strong>")
+        .openPopup();
+</script>
+
+</body>
+</html>

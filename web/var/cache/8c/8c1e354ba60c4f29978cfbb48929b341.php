@@ -1,0 +1,326 @@
+<?php
+
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Extension\CoreExtension;
+use Twig\Extension\SandboxExtension;
+use Twig\Markup;
+use Twig\Sandbox\SecurityError;
+use Twig\Sandbox\SecurityNotAllowedTagError;
+use Twig\Sandbox\SecurityNotAllowedFilterError;
+use Twig\Sandbox\SecurityNotAllowedFunctionError;
+use Twig\Source;
+use Twig\Template;
+use Twig\TemplateWrapper;
+
+/* create_store.html.twig */
+class __TwigTemplate_c7d1306954d5e47f7ed76f0379b0d800 extends Template
+{
+    private Source $source;
+    /**
+     * @var array<string, Template>
+     */
+    private array $macros = [];
+
+    public function __construct(Environment $env)
+    {
+        parent::__construct($env);
+
+        $this->source = $this->getSourceContext();
+
+        $this->parent = false;
+
+        $this->blocks = [
+        ];
+    }
+
+    protected function doDisplay(array $context, array $blocks = []): iterable
+    {
+        $macros = $this->macros;
+        // line 1
+        yield "<!DOCTYPE html>
+<html lang=\"fr\">
+<head>
+    <meta charset=\"UTF-8\">
+    <title>Créer un Store - LEGO Map Admin</title>
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+    <script src=\"https://cdn.tailwindcss.com\"></script>
+    <style>
+        *:focus-visible {
+            outline: 3px solid #1a365d !important;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body class=\"bg-yellow-400 min-h-screen font-sans text-gray-900 flex items-center justify-center p-4\">
+
+<main id=\"main-content\" class=\"w-full max-w-2xl\" role=\"main\">
+    <div class=\"bg-white p-8 rounded-2xl shadow-2xl border-4 border-red-800\">
+        <h1 class=\"text-3xl font-black text-red-800 mb-6 uppercase tracking-tight\">Créer un nouveau Store</h1>
+
+        ";
+        // line 21
+        if (array_key_exists("error", $context)) {
+            // line 22
+            yield "            <div class=\"bg-red-50 border-l-4 border-red-700 text-red-900 px-4 py-3 rounded mb-6\" role=\"alert\">
+                <p class=\"font-bold\">Erreur :</p>
+                <p>";
+            // line 24
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["error"] ?? null), "html", null, true);
+            yield "</p>
+            </div>
+        ";
+        }
+        // line 27
+        yield "
+        <form method=\"POST\" enctype=\"multipart/form-data\" class=\"space-y-6\">
+            <fieldset class=\"space-y-6\">
+                <legend class=\"sr-only\">Informations générales du store</legend>
+
+                <div>
+                    <label for=\"nom\" class=\"block font-bold mb-2 text-gray-900\">Nom du Store</label>
+                    <input type=\"text\" id=\"nom\" name=\"nom\" required aria-required=\"true\"
+                           class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none transition-colors\">
+                </div>
+
+                <div>
+                    <label for=\"description\" class=\"block font-bold mb-2 text-gray-900\">Description</label>
+                    <textarea id=\"description\" name=\"description\" required aria-required=\"true\"
+                              class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none min-h-[120px] transition-colors\"></textarea>
+                </div>
+
+                <div class=\"grid grid-cols-1 sm:grid-cols-2 gap-4\">
+                    <div>
+                        <label for=\"date\" class=\"block font-bold mb-2 text-gray-900\">Date d'ouverture</label>
+                        <input type=\"date\" id=\"date\" name=\"date\" required aria-required=\"true\"
+                               class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none\">
+                    </div>
+                    <div>
+                        <label for=\"avis\" class=\"block font-bold mb-2 text-gray-900\">Avis (0 à 5)</label>
+                        <input type=\"number\" id=\"avis\" name=\"avis\" min=\"0\" max=\"5\" required aria-required=\"true\"
+                               class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none\">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class=\"bg-blue-50 p-4 rounded-xl border-2 border-blue-100\">
+                <legend class=\"text-blue-900 font-bold px-2\">Localisation</legend>
+                <input type=\"hidden\" name=\"latitude\" id=\"latitude\">
+                <input type=\"hidden\" name=\"longitude\" id=\"longitude\">
+                <p class=\"text-blue-800 flex items-center gap-2\" role=\"status\" id=\"geo-status\">
+                    <span aria-hidden=\"true\">📍</span> Géolocalisation en cours...
+                </p>
+            </fieldset>
+
+            <fieldset class=\"space-y-6\">
+                <legend class=\"sr-only\">Contact et Médias</legend>
+                <div class=\"grid grid-cols-1 sm:grid-cols-2 gap-4\">
+                    <div>
+                        <label for=\"contactNom\" class=\"block font-bold mb-2 text-gray-900\">Nom du contact</label>
+                        <input type=\"text\" id=\"contactNom\" name=\"contactNom\" required aria-required=\"true\"
+                               class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none\">
+                    </div>
+                    <div>
+                        <label for=\"contactEmail\" class=\"block font-bold mb-2 text-gray-900\">Email du contact</label>
+                        <input type=\"email\" id=\"contactEmail\" name=\"contactEmail\" required aria-required=\"true\"
+                               class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none\">
+                    </div>
+                </div>
+
+                <div>
+                    <label for=\"photo\" class=\"block font-bold mb-2 text-gray-900\">Photo du store</label>
+                    <input type=\"file\" id=\"photo\" name=\"photo\" accept=\"image/*\" required aria-required=\"true\"
+                           class=\"w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-red-700 file:text-white hover:file:bg-red-800 cursor-pointer\">
+                </div>
+            </fieldset>
+
+            <div class=\"flex flex-col sm:flex-row gap-4 pt-4 border-t-2 border-gray-100\">
+                <button type=\"submit\"
+                        class=\"flex-[2] bg-green-700 text-white font-black py-4 rounded-xl hover:bg-green-800 transition shadow-lg text-lg uppercase tracking-widest focus:ring-4 focus:ring-green-300\">
+                    Créer le Store
+                </button>
+                <a href=\"/\"
+                   class=\"flex-1 bg-gray-200 text-gray-700 text-center font-bold py-4 rounded-xl hover:bg-gray-300 transition flex items-center justify-center border-2 border-transparent focus:ring-4 focus:ring-gray-400\">
+                    Annuler
+                </a>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script>
+    document.addEventListener(\"DOMContentLoaded\", function () {
+        const status = document.getElementById(\"geo-status\");
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    document.getElementById(\"latitude\").value = position.coords.latitude;
+                    document.getElementById(\"longitude\").value = position.coords.longitude;
+                    status.innerHTML = \"✅ Position enregistrée.\";
+                    status.classList.replace('text-blue-800', 'text-green-800');
+                },
+                function(error) {
+                    status.innerHTML = \"❌ GPS non disponible.\";
+                    status.classList.replace('text-blue-800', 'text-red-800');
+                }
+            );
+        }
+    });
+</script>
+</body>
+</html>";
+        yield from [];
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getTemplateName(): string
+    {
+        return "create_store.html.twig";
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function isTraitable(): bool
+    {
+        return false;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getDebugInfo(): array
+    {
+        return array (  76 => 27,  70 => 24,  66 => 22,  64 => 21,  42 => 1,);
+    }
+
+    public function getSourceContext(): Source
+    {
+        return new Source("<!DOCTYPE html>
+<html lang=\"fr\">
+<head>
+    <meta charset=\"UTF-8\">
+    <title>Créer un Store - LEGO Map Admin</title>
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+    <script src=\"https://cdn.tailwindcss.com\"></script>
+    <style>
+        *:focus-visible {
+            outline: 3px solid #1a365d !important;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body class=\"bg-yellow-400 min-h-screen font-sans text-gray-900 flex items-center justify-center p-4\">
+
+<main id=\"main-content\" class=\"w-full max-w-2xl\" role=\"main\">
+    <div class=\"bg-white p-8 rounded-2xl shadow-2xl border-4 border-red-800\">
+        <h1 class=\"text-3xl font-black text-red-800 mb-6 uppercase tracking-tight\">Créer un nouveau Store</h1>
+
+        {% if error is defined %}
+            <div class=\"bg-red-50 border-l-4 border-red-700 text-red-900 px-4 py-3 rounded mb-6\" role=\"alert\">
+                <p class=\"font-bold\">Erreur :</p>
+                <p>{{ error }}</p>
+            </div>
+        {% endif %}
+
+        <form method=\"POST\" enctype=\"multipart/form-data\" class=\"space-y-6\">
+            <fieldset class=\"space-y-6\">
+                <legend class=\"sr-only\">Informations générales du store</legend>
+
+                <div>
+                    <label for=\"nom\" class=\"block font-bold mb-2 text-gray-900\">Nom du Store</label>
+                    <input type=\"text\" id=\"nom\" name=\"nom\" required aria-required=\"true\"
+                           class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none transition-colors\">
+                </div>
+
+                <div>
+                    <label for=\"description\" class=\"block font-bold mb-2 text-gray-900\">Description</label>
+                    <textarea id=\"description\" name=\"description\" required aria-required=\"true\"
+                              class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none min-h-[120px] transition-colors\"></textarea>
+                </div>
+
+                <div class=\"grid grid-cols-1 sm:grid-cols-2 gap-4\">
+                    <div>
+                        <label for=\"date\" class=\"block font-bold mb-2 text-gray-900\">Date d'ouverture</label>
+                        <input type=\"date\" id=\"date\" name=\"date\" required aria-required=\"true\"
+                               class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none\">
+                    </div>
+                    <div>
+                        <label for=\"avis\" class=\"block font-bold mb-2 text-gray-900\">Avis (0 à 5)</label>
+                        <input type=\"number\" id=\"avis\" name=\"avis\" min=\"0\" max=\"5\" required aria-required=\"true\"
+                               class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none\">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class=\"bg-blue-50 p-4 rounded-xl border-2 border-blue-100\">
+                <legend class=\"text-blue-900 font-bold px-2\">Localisation</legend>
+                <input type=\"hidden\" name=\"latitude\" id=\"latitude\">
+                <input type=\"hidden\" name=\"longitude\" id=\"longitude\">
+                <p class=\"text-blue-800 flex items-center gap-2\" role=\"status\" id=\"geo-status\">
+                    <span aria-hidden=\"true\">📍</span> Géolocalisation en cours...
+                </p>
+            </fieldset>
+
+            <fieldset class=\"space-y-6\">
+                <legend class=\"sr-only\">Contact et Médias</legend>
+                <div class=\"grid grid-cols-1 sm:grid-cols-2 gap-4\">
+                    <div>
+                        <label for=\"contactNom\" class=\"block font-bold mb-2 text-gray-900\">Nom du contact</label>
+                        <input type=\"text\" id=\"contactNom\" name=\"contactNom\" required aria-required=\"true\"
+                               class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none\">
+                    </div>
+                    <div>
+                        <label for=\"contactEmail\" class=\"block font-bold mb-2 text-gray-900\">Email du contact</label>
+                        <input type=\"email\" id=\"contactEmail\" name=\"contactEmail\" required aria-required=\"true\"
+                               class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none\">
+                    </div>
+                </div>
+
+                <div>
+                    <label for=\"photo\" class=\"block font-bold mb-2 text-gray-900\">Photo du store</label>
+                    <input type=\"file\" id=\"photo\" name=\"photo\" accept=\"image/*\" required aria-required=\"true\"
+                           class=\"w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-red-700 file:text-white hover:file:bg-red-800 cursor-pointer\">
+                </div>
+            </fieldset>
+
+            <div class=\"flex flex-col sm:flex-row gap-4 pt-4 border-t-2 border-gray-100\">
+                <button type=\"submit\"
+                        class=\"flex-[2] bg-green-700 text-white font-black py-4 rounded-xl hover:bg-green-800 transition shadow-lg text-lg uppercase tracking-widest focus:ring-4 focus:ring-green-300\">
+                    Créer le Store
+                </button>
+                <a href=\"/\"
+                   class=\"flex-1 bg-gray-200 text-gray-700 text-center font-bold py-4 rounded-xl hover:bg-gray-300 transition flex items-center justify-center border-2 border-transparent focus:ring-4 focus:ring-gray-400\">
+                    Annuler
+                </a>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script>
+    document.addEventListener(\"DOMContentLoaded\", function () {
+        const status = document.getElementById(\"geo-status\");
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    document.getElementById(\"latitude\").value = position.coords.latitude;
+                    document.getElementById(\"longitude\").value = position.coords.longitude;
+                    status.innerHTML = \"✅ Position enregistrée.\";
+                    status.classList.replace('text-blue-800', 'text-green-800');
+                },
+                function(error) {
+                    status.innerHTML = \"❌ GPS non disponible.\";
+                    status.classList.replace('text-blue-800', 'text-red-800');
+                }
+            );
+        }
+    });
+</script>
+</body>
+</html>", "create_store.html.twig", "/var/www/html/src/View/create_store.html.twig");
+    }
+}

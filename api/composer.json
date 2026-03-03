@@ -1,7 +1,9 @@
 {
     "require": {
       "ext-pdo": "*",
-      "firebase/php-jwt": "^7.0"
+      "firebase/php-jwt": "^7.0",
+        "phpmailer/phpmailer": "^7.0",
+        "maildrop/maildrop-php": "^1.4"
     },
     "autoload": {
       "psr-4": {

@@ -11,6 +11,7 @@ class User
     private string $name;
     private string $email;
     private string $password;
+    private Role $role;
 
     /* =========================
        Getters / Setters
@@ -56,12 +57,23 @@ class User
         $this->password = $password;
     }
 
+    public function getRole(): Role
+    {
+        return $this->role;
+    }
+
+    public function setRole(Role $role): void
+    {
+        $this->role = $role;
+    }
+
     public function toJson(): string
     {
         return json_encode([
             'id'    => $this->id,
             'name'  => $this->name,
             'email' => $this->email,
+            'role'  => $this->role->value,
         ]);
     }
 
@@ -91,14 +103,18 @@ class User
             $user->setPassword($data['password']);
         }
 
+        if (isset($data['role'])) {
+            $user->setRole(Role::from($data['role']));
+        } else {
+            $user->setRole(Role::USER);
+        }
+
         return $user;
     }
 
     public function create(): ?string
     {
         $db = Database::getConnection();
-
-        // Génération UUID v4
         $this->id = self::generateUuid();
 
         $stmt = $db->prepare(
@@ -119,21 +135,18 @@ class User
     public static function getById(string $id): ?User
     {
         $db = Database::getConnection();
-
         $stmt = $db->prepare("SELECT * FROM user WHERE id = :id");
         $stmt->execute([':id' => $id]);
-
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!$data) {
-            return null;
-        }
+        if (!$data) return null;
 
         $user = new self();
         $user->setId($data['id']);
         $user->setName($data['name']);
         $user->setEmail($data['email']);
         $user->setPassword($data['password']);
+        $user->setRole(Role::from($data['role']));
 
         return $user;
     }
@@ -141,23 +154,42 @@ class User
     public static function getByEmail(string $email): ?User
     {
         $db = Database::getConnection();
-
         $stmt = $db->prepare("SELECT * FROM user WHERE email = :email");
         $stmt->execute([':email' => $email]);
-
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!$data) {
-            return null;
-        }
+        if (!$data) return null;
 
         $user = new self();
         $user->setId($data['id']);
         $user->setName($data['name']);
         $user->setEmail($data['email']);
         $user->setPassword($data['password']);
+        // AJOUTER CECI :
+        $user->setRole(Role::from($data['role']));
 
         return $user;
+    }
+
+    // Dans api/src/model/User.php
+
+    public static function findAll(): array
+    {
+        $db = \api\config\Database::getConnection();
+        $stmt = $db->query("SELECT * FROM user ORDER BY name ASC");
+        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        $users = [];
+        foreach ($rows as $row) {
+            $user = new self();
+            $user->setId($row['id']);
+            $user->setName($row['name']);
+            $user->setEmail($row['email']);
+            $user->setRole(Role::from($row['role']));
+            $users[] = $user;
+        }
+
+        return $users;
     }
 
     public function update(): bool
@@ -167,17 +199,21 @@ class User
         $stmt = $db->prepare(
             "UPDATE user 
              SET name = :name, 
-                 email = :email, 
-                 password = :password
+                 email = :email
              WHERE id = :id"
         );
 
-        return $stmt->execute([
-            ':id'       => $this->id,
-            ':name'     => $this->name,
-            ':email'    => $this->email,
-            ':password' => password_hash($this->password, PASSWORD_DEFAULT),
-        ]);
+        $params = [
+            ':id'            => $this->id,
+            ':name'           => $this->name,
+            ':email'          => $this->email,
+        ];
+
+        $success = $stmt->execute($params);
+
+        error_log("Update ID {$this->id} - Success: " . ($success ? 'Oui' : 'Non'));
+
+        return $success;
     }
 
     public static function delete(string $id): bool

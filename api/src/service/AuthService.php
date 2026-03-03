@@ -89,7 +89,7 @@ class AuthService
     /**
      * Inscription d'un nouvel utilisateur
      */
-    public static function register(string $name, string $email, string $password): array
+    public static function register(string $name, string $email, string $password, string $role): array
     {
         if (User::getByEmail($email)) {
             throw new Exception("Cet email est déjà utilisé.");
@@ -99,6 +99,9 @@ class AuthService
         $user->setName($name);
         $user->setEmail($email);
         $user->setPassword($password);
+
+        $roleEnum = \api\model\Role::tryFrom($role) ?? \api\model\Role::USER;
+        $user->setRole($roleEnum);
 
         $userId = $user->create();
 
@@ -131,10 +134,14 @@ class AuthService
     {
         $now = time();
 
+        $user = User::getById($userId);
+        $roleValue = $user ? $user->getRole()->value : 'USER';
+
         // 1. Access Token (15 minutes)
         $accessPayload = [
             'iss' => 'legomap',
             'sub' => $userId,
+            'role' => $roleValue,
             'iat' => $now,
             'exp' => $now + (60 * 15)
         ];
@@ -159,6 +166,7 @@ class AuthService
 
         return [
             'user_id'       => $userId,
+            'role'          => $roleValue,
             'access_token'  => $accessToken,
             'refresh_token' => $refreshTokenPlain,
             'expires_in'    => 900
