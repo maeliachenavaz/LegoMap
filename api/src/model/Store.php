@@ -269,15 +269,24 @@ class Store
         return $store;
     }
 
-    public static function getByCreatorId(string $creatorId): array
+    public static function getByCreatorId(string $creatorId, ?int $page = null, int $limit = 10): array
     {
         $db = Database::getConnection();
 
-        $stmt = $db->prepare("SELECT * FROM store WHERE creator_id = :creator_id");
-        $stmt->execute([':creator_id' => $creatorId]);
+        if ($page !== null) {
+            $offset = ($page - 1) * $limit;
+            $sql = "SELECT * FROM store WHERE creator_id = :creator_id LIMIT :limit OFFSET :offset";
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':creator_id', $creatorId);
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $stmt->execute();
+        } else {
+            $stmt = $db->prepare("SELECT * FROM store WHERE creator_id = :creator_id");
+            $stmt->execute([':creator_id' => $creatorId]);
+        }
 
         $stores = [];
-
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $store = new self();
             $store->setId($data['id']);
@@ -298,16 +307,24 @@ class Store
         return $stores;
     }
 
-    public static function getAll(): array
+    public static function getAll(?int $page = null, int $limit = 10): array
     {
         $db = Database::getConnection();
 
-        $stmt = $db->query("SELECT * FROM store");
+        // Si page est précisé, on calcule l'offset, sinon on fait la requête totale
+        if ($page !== null) {
+            $offset = ($page - 1) * $limit;
+            $sql = "SELECT * FROM store LIMIT :limit OFFSET :offset";
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $stmt->execute();
+        } else {
+            $stmt = $db->query("SELECT * FROM store");
+        }
 
         $stores = [];
-
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
             $store = new self();
             $store->setId($data['id']);
             $store->setNom($data['nom']);
@@ -320,7 +337,6 @@ class Store
             $store->setContactEmail($data['contact_email']);
             $store->setPhoto($data['photo']);
             $store->setCreator_id($data['creator_id']);
-
             $stores[] = $store;
         }
 

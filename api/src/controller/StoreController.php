@@ -125,11 +125,20 @@ class StoreController
     public static function getAll(): void
     {
         AuthService::checkAndRefresh();
-        $stores = Store::getAll();
-        $result = [];
 
+        // On récupère "page" depuis les paramètres GET (null si absent)
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : null;
+        $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 1000; // Optionnel : permettre de changer la taille du lot
+
+        // On appelle le modèle avec les paramètres
+        $stores = Store::getAll($page, $limit);
+
+        $result = [];
         foreach ($stores as $store) {
             $arr = json_decode($store->toJson(), true);
+
+            // Optimisation : n'appeler Nominatim que si nécessaire
+            // (Note: faire du reverse geocoding sur chaque élément d'une liste peut ralentir l'API)
             if (empty($arr['ville'])) {
                 $arr['ville'] = self::getCityFromCoordinates($arr['latitude'], $arr['longitude']);
             }
@@ -144,7 +153,13 @@ class StoreController
     {
         $auth = AuthService::checkAndRefresh();
         $userId = $auth['user_id'];
-        $stores = Store::getByCreatorId($userId);
+
+        // Récupération des paramètres de pagination
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : null;
+        $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 1000;
+
+        // Appel du modèle avec pagination
+        $stores = Store::getByCreatorId($userId, $page, $limit);
 
         $result = [];
         foreach ($stores as $store) {
