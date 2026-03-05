@@ -4,29 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="95391410-8c30-4da3-835f-6cceec2653ee" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/layouts/MainLayout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/layouts/MainLayout.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/models/RefreshToken.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/models/RefreshToken.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/models/Store.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/models/Store.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/models/User.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/models/User.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/pages/CreateStorePage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/pages/CreateStorePage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/pages/HomePage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/pages/HomePage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/pages/LoginPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/pages/LoginPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/pages/PersonnalPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/pages/PersonnalPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/pages/ProfilPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/pages/ProfilPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/pages/RegisterPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/pages/RegisterPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/pages/StoreDetailPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/pages/StoreDetailPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/pages/StoreManagePage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/pages/StoreManagePage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/router/AuthRepository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/router/AuthRepository.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/router/Router.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/router/Router.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/services/ApiClient.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/services/ApiClient.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/services/StoreService.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/services/StoreService.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/services/UserService.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/services/UserService.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lego_map/lib/widgets/BottomNavBar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lego_map/lib/widgets/BottomNavBar.dart" afterDir="false" />
-    </list>
+    <list default="true" id="95391410-8c30-4da3-835f-6cceec2653ee" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
