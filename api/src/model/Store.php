@@ -269,6 +269,9 @@ class Store
         return $store;
     }
 
+    /**
+     * @return Store[]
+     */
     public static function getByCreatorId(string $creatorId, ?int $page = null, int $limit = 10): array
     {
         $db = Database::getConnection();
@@ -307,6 +310,9 @@ class Store
         return $stores;
     }
 
+    /**
+     * @return Store[]
+     */
     public static function getAll(?int $page = null, int $limit = 1000): array
     {
         $db = Database::getConnection();

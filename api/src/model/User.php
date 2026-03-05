@@ -166,6 +166,9 @@ class User
         return $user;
     }
 
+    /**
+     * @return User[]
+     */
     public static function findAll(): array
     {
         $db = \api\config\Database::getConnection();

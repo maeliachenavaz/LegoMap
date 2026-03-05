@@ -118,6 +118,8 @@ class RefreshToken
         $token->setTokenHash($data['token_hash']);
         $token->setJti($data['jti']);
         $token->setExpiresAt($data['expires_at']);
+        $token->created_at = $data['created_at'] ?? null;
+        $token->updated_at = $data['updated_at'] ?? null;
 
         return $token;
     }

@@ -10,7 +10,14 @@
     <option name="highlightLevel" value="WARNING" />
     <option name="transferred" value="true" />
   </component>
+  <component name="PhpStan">
+    <PhpStan_settings>
+      <PhpStanConfiguration deletedFromTheList="true" tool_path="$PROJECT_DIR$/api/vendor/bin/phpstan" />
+    </PhpStan_settings>
+  </component>
   <component name="PhpStanOptionsConfiguration">
+    <option name="config" value="C:\Users\Maelia\Desktop\GIT\LegoMap\api\vendor\phpstan\phpstan\conf\bleedingEdge.neon" />
+    <option name="level" value="3" />
     <option name="transferred" value="true" />
   </component>
   <component name="PsalmOptionsConfiguration">

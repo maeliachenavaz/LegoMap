@@ -4,6 +4,10 @@ namespace App\Controller;
 
 abstract class BaseController extends TwigController
 {
+    /**
+     * @param array<string, mixed>|null $data
+     * @return mixed
+     */
     protected function callApi(string $url, string $method = 'GET', array $data = null, bool $protected = true)
     {
         $headers = [
@@ -35,7 +39,7 @@ abstract class BaseController extends TwigController
         $context = stream_context_create($options);
         $responseBody = file_get_contents($url, false, $context);
 
-        $headersResponse = $http_response_header ?? [];
+        $headersResponse = $http_response_header;
         $statusLine = $headersResponse[0] ?? '';
 
         foreach ($headersResponse as $h) {

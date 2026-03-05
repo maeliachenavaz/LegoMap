@@ -298,14 +298,14 @@ class StoreController
                 $message = file_get_contents($templatePath);
 
                 $placeholders = [
-                    '{{id}}' => $store->getId(),
-                    '{{nom}}' => $store->getNom(),
-                    '{{description}}' => $store->getDescription(),
-                    '{{date}}' => $store->getDate(),
-                    '{{avis}}' => $store->getAvis(),
-                    '{{contactNom}}' => $store->getContactNom(),
-                    '{{contactEmail}}' => $store->getContactEmail(),
-                    '{{adresse}}' => $fullAddress
+                    '{{id}}'           => (string)$store->getId(),
+                    '{{nom}}'          => (string)$store->getNom(),
+                    '{{description}}'  => (string)$store->getDescription(),
+                    '{{date}}'         => (string)$store->getDate(),
+                    '{{avis}}'         => (string)$store->getAvis(),
+                    '{{contactNom}}'   => (string)$store->getContactNom(),
+                    '{{contactEmail}}' => (string)$store->getContactEmail(),
+                    '{{adresse}}'      => (string)$fullAddress
                 ];
 
                 $message = str_replace(array_keys($placeholders), array_values($placeholders), $message);

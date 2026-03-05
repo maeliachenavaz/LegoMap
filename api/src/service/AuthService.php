@@ -35,6 +35,7 @@ class AuthService
 
     /**
      * Vérifie l'access token et le rafraîchit si nécessaire via le header.
+     * @return array{user_id: string, access_token?: string, role?: string}
      */
     public static function checkAndRefresh(): array
     {
@@ -90,6 +91,7 @@ class AuthService
 
     /**
      * Inscription d'un nouvel utilisateur.
+     * @return array{user_id: string, role: string, access_token: string, refresh_token: string, expires_in: int}
      */
     public static function register(string $name, string $email, string $password, string $role): array
     {
@@ -116,6 +118,7 @@ class AuthService
 
     /**
      * Connexion.
+     * @return array{user_id: string, role: string, access_token: string, refresh_token: string, expires_in: int}
      */
     public static function login(string $email, string $password): array
     {
@@ -130,6 +133,7 @@ class AuthService
 
     /**
      * Génère le couple Access/Refresh Token
+     * @return array{user_id: string, role: string, access_token: string, refresh_token: string, expires_in: int}
      */
     private static function generateTokens(string $userId): array
     {
@@ -173,6 +177,7 @@ class AuthService
 
     /**
      * Rafraîchit les tokens à partir d'un refresh token valide.
+     * @return array{user_id: string, role: string, access_token: string, refresh_token: string, expires_in: int}
      */
     public static function refresh(string $refreshTokenPlain): array
     {

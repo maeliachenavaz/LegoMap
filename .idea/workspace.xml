@@ -4,7 +4,25 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="95391410-8c30-4da3-835f-6cceec2653ee" name="Changes" comment="" />
+    <list default="true" id="95391410-8c30-4da3-835f-6cceec2653ee" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/api/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/controller/StoreController.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controller/StoreController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/model/RefreshToken.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/model/RefreshToken.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/model/Store.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/model/Store.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/model/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/model/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/service/AuthService.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/service/AuthService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/vendor/composer/autoload_files.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/vendor/composer/autoload_files.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/vendor/composer/autoload_static.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/vendor/composer/autoload_static.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/vendor/composer/installed.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/vendor/composer/installed.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/vendor/composer/installed.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/vendor/composer/installed.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/web/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/web/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/Controller/BaseController.php" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/Controller/BaseController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/Controller/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/Controller/HomeController.php" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,6 +43,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PhpStanProjectConfiguration">
+    <option name="selectedConfigurationId" value="Local" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
@@ -58,7 +79,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "device.mirroring",
+    "settings.editor.selected.configurable": "settings.php.quality.tools.phpstan",
     "show.migrate.to.gradle.popup": "false",
     "vue.rearranger.settings.migration": "true"
   }
@@ -91,7 +112,8 @@
       <option name="presentableId" value="Default" />
       <updated>1772620403593</updated>
       <workItem from="1772648311846" duration="824000" />
-      <workItem from="1772711559198" duration="22000" />
+      <workItem from="1772711559198" duration="231000" />
+      <workItem from="1772712494523" duration="1933000" />
     </task>
     <servers />
   </component>

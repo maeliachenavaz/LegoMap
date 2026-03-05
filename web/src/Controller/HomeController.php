@@ -6,6 +6,8 @@ class HomeController extends BaseController
 {
     public function index(): void
     {
+        $stores = [];
+
         if (!isset($_SESSION['cached_stores'])) {
             $result = $this->callApi('http://api/stores');
             if (is_array($result) && !isset($result['error'])) {
