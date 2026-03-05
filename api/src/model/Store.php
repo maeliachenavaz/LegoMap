@@ -307,11 +307,10 @@ class Store
         return $stores;
     }
 
-    public static function getAll(?int $page = null, int $limit = 10): array
+    public static function getAll(?int $page = null, int $limit = 1000): array
     {
         $db = Database::getConnection();
 
-        // Si page est précisé, on calcule l'offset, sinon on fait la requête totale
         if ($page !== null) {
             $offset = ($page - 1) * $limit;
             $sql = "SELECT * FROM store LIMIT :limit OFFSET :offset";
@@ -378,7 +377,7 @@ class Store
 
         error_log("Update ID {$this->id} - Success: " . ($success ? 'Oui' : 'Non'));
 
-        return $success; // On retourne directement la variable, on ne ré-exécute pas !
+        return $success;
     }
 
     public static function delete(string $id): bool

@@ -10,30 +10,6 @@ use PHPMailer\PHPMailer\Exception;
 
 class StoreController
 {
-    /* =========================
-       REVERSE GEOCODING : récupère la ville depuis lat/lon
-    ========================== */
-    private static function getCityFromCoordinates(float $lat, float $lon): ?string
-    {
-        $url = "https://nominatim.openstreetmap.org/reverse?format=json&lat={$lat}&lon={$lon}&zoom=10&addressdetails=1";
-        $options = [
-            "http" => [
-                "header" => "User-Agent: lego-app\r\n"
-            ]
-        ];
-        $context = stream_context_create($options);
-        $response = @file_get_contents($url, false, $context);
-
-        if (!$response) return null;
-
-        $data = json_decode($response, true);
-
-        return $data['address']['city']
-            ?? $data['address']['town']
-            ?? $data['address']['village']
-            ?? null;
-    }
-
     public static function create(): void
     {
         $auth = AuthService::checkAndRefresh();
@@ -55,7 +31,6 @@ class StoreController
             }
         }
 
-        // 4. Gestion de la Photo (Fichier)
         $photoBase64 = null;
         if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
             $type = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
@@ -124,59 +99,76 @@ class StoreController
 
     public static function getAll(): void
     {
-        AuthService::checkAndRefresh();
+        try {
+            $auth = AuthService::checkAndRefresh();
+            $currentUser = \api\model\User::getById($auth['user_id']);
 
-        // On récupère "page" depuis les paramètres GET (null si absent)
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : null;
-        $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 1000; // Optionnel : permettre de changer la taille du lot
-
-        // On appelle le modèle avec les paramètres
-        $stores = Store::getAll($page, $limit);
-
-        $result = [];
-        foreach ($stores as $store) {
-            $arr = json_decode($store->toJson(), true);
-
-            // Optimisation : n'appeler Nominatim que si nécessaire
-            // (Note: faire du reverse geocoding sur chaque élément d'une liste peut ralentir l'API)
-            if (empty($arr['ville'])) {
-                $arr['ville'] = self::getCityFromCoordinates($arr['latitude'], $arr['longitude']);
+            if (!$currentUser || $currentUser->getRole() !== \api\model\Role::ADMIN) {
+                http_response_code(403);
+                echo json_encode(['error' => 'Accès interdit : Seul un administrateur peut voir tous les stores.']);
+                return;
             }
-            $result[] = $arr;
-        }
 
-        http_response_code(200);
-        echo json_encode($result);
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : null;
+            $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 1000;
+
+            $stores = Store::getAll($page, $limit);
+
+            $result = [];
+            foreach ($stores as $store) {
+                $arr = json_decode($store->toJson(), true);
+                if (empty($arr['ville'])) {
+                    $arr['ville'] = self::getCityFromCoordinates($arr['latitude'], $arr['longitude']);
+                }
+                $result[] = $arr;
+            }
+
+            http_response_code(200);
+            echo json_encode($result);
+        } catch (\Exception $e) {
+            http_response_code(401);
+            echo json_encode(['error' => $e->getMessage()]);
+        }
     }
 
     public static function getByUser(): void
     {
-        $auth = AuthService::checkAndRefresh();
-        $userId = $auth['user_id'];
+        try {
+            $auth = AuthService::checkAndRefresh();
+            $loggedUserId = $auth['user_id'];
 
-        // Récupération des paramètres de pagination
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : null;
-        $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 1000;
+            $currentUser = \api\model\User::getById($loggedUserId);
 
-        // Appel du modèle avec pagination
-        $stores = Store::getByCreatorId($userId, $page, $limit);
+            $targetUserId = $_GET['user_id'] ?? $loggedUserId;
 
-        $result = [];
-        foreach ($stores as $store) {
-            $arr = json_decode($store->toJson(), true);
-            if (empty($arr['ville'])) {
-                $arr['ville'] = self::getCityFromCoordinates($arr['latitude'], $arr['longitude']);
+            if ($targetUserId !== $loggedUserId && $currentUser->getRole() !== \api\model\Role::ADMIN) {
+                http_response_code(403);
+                echo json_encode(['error' => 'Accès interdit : Vous ne pouvez consulter que vos propres stores.']);
+                return;
             }
-            $result[] = $arr;
-        }
 
-        http_response_code(200);
-        echo json_encode($result);
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : null;
+            $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 1000;
+
+            $stores = Store::getByCreatorId($targetUserId, $page, $limit);
+
+            $result = [];
+            foreach ($stores as $store) {
+                $arr = json_decode($store->toJson(), true);
+                if (empty($arr['ville'])) {
+                    $arr['ville'] = self::getCityFromCoordinates($arr['latitude'], $arr['longitude']);
+                }
+                $result[] = $arr;
+            }
+
+            http_response_code(200);
+            echo json_encode($result);
+        } catch (\Exception $e) {
+            http_response_code(401);
+            echo json_encode(['error' => $e->getMessage()]);
+        }
     }
 
-    /* =========================
-       UPDATE STORE
-    ==========================*/
     public static function update(string $id): void
     {
         $auth = AuthService::checkAndRefresh();
@@ -189,9 +181,12 @@ class StoreController
             return;
         }
 
-        if ($store->getCreator_id() !== $userId) {
+        $currentUser = \api\model\User::getById($userId);
+        $isAdmin = $currentUser && $currentUser->getRole() === \api\model\Role::ADMIN;
+
+        if ($store->getCreator_id() !== $userId && !$isAdmin) {
             http_response_code(403);
-            echo json_encode(['error' => 'Accès interdit']);
+            echo json_encode(['error' => 'Accès interdit : vous n\'avez pas les droits de modification sur ce store.']);
             return;
         }
 
@@ -213,16 +208,13 @@ class StoreController
 
         if ($store->update()) {
             http_response_code(200);
-            echo $store->toJson(); // Pas besoin de re-requêter la DB ici
+            echo $store->toJson();
         } else {
             http_response_code(500);
             echo json_encode(['error' => 'Erreur lors de la mise à jour']);
         }
     }
 
-    /* =========================
-       DELETE STORE
-    ==========================*/
     public static function delete(string $id): void
     {
         $auth = AuthService::checkAndRefresh();
@@ -235,9 +227,12 @@ class StoreController
             return;
         }
 
-        if ($store->getCreator_id() !== $userId) {
+        $currentUser = \api\model\User::getById($userId);
+        $isAdmin = $currentUser && $currentUser->getRole() === \api\model\Role::ADMIN;
+
+        if ($store->getCreator_id() !== $userId && !$isAdmin) {
             http_response_code(403);
-            echo json_encode(['error' => 'Accès interdit']);
+            echo json_encode(['error' => 'Accès interdit : seul le créateur ou un administrateur peut supprimer ce store.']);
             return;
         }
 
@@ -250,11 +245,31 @@ class StoreController
         }
     }
 
+    private static function getCityFromCoordinates(float $lat, float $lon): ?string
+    {
+        $url = "https://nominatim.openstreetmap.org/reverse?format=json&lat={$lat}&lon={$lon}&zoom=10&addressdetails=1";
+        $options = [
+            "http" => [
+                "header" => "User-Agent: lego-app\r\n"
+            ]
+        ];
+        $context = stream_context_create($options);
+        $response = file_get_contents($url, false, $context);
+
+        if (!$response) return null;
+
+        $data = json_decode($response, true);
+
+        return $data['address']['city']
+            ?? $data['address']['town']
+            ?? $data['address']['village']
+            ?? null;
+    }
+
     private static function sendStoreCreatedEmail(Store $store): void
     {
         $mail = new PHPMailer(true);
 
-        // --- REVERSE GEOCODING ---
         $lat = $store->getLatitude();
         $lon = $store->getLongitude();
         $fullAddress = "Adresse non disponible";
@@ -262,7 +277,7 @@ class StoreController
         $url = "https://nominatim.openstreetmap.org/reverse?format=json&lat={$lat}&lon={$lon}&zoom=18&addressdetails=1";
         $options = ["http" => ["header" => "User-Agent: LegoMapApp/1.0\r\n"]];
         $context = stream_context_create($options);
-        $response = @file_get_contents($url, false, $context);
+        $response = file_get_contents($url, false, $context);
 
         if ($response) {
             $data = json_decode($response, true);
@@ -278,7 +293,6 @@ class StoreController
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
-            // Expéditeur / destinataire
             $mail->setFrom('no-reply@lego-app.com', 'Lego App');
             $mail->addAddress('maelia.chenavaz@viacesi.fr', $store->getContactNom());
 
@@ -290,16 +304,15 @@ class StoreController
             } else {
                 $message = file_get_contents($templatePath);
 
-                // Remplacement des placeholders
                 $placeholders = [
-                    '{{id}}'          => $store->getId(),
-                    '{{nom}}'          => $store->getNom(),
-                    '{{description}}'  => $store->getDescription(),
-                    '{{date}}'         => $store->getDate(),
-                    '{{avis}}'         => $store->getAvis(),
-                    '{{contactNom}}'   => $store->getContactNom(),
+                    '{{id}}' => $store->getId(),
+                    '{{nom}}' => $store->getNom(),
+                    '{{description}}' => $store->getDescription(),
+                    '{{date}}' => $store->getDate(),
+                    '{{avis}}' => $store->getAvis(),
+                    '{{contactNom}}' => $store->getContactNom(),
                     '{{contactEmail}}' => $store->getContactEmail(),
-                    '{{adresse}}'     => $fullAddress
+                    '{{adresse}}' => $fullAddress
                 ];
 
                 $message = str_replace(array_keys($placeholders), array_values($placeholders), $message);
@@ -309,7 +322,7 @@ class StoreController
             $mail->CharSet = 'UTF-8';
             $mail->Encoding = 'base64';
             $mail->Subject = 'LEGO Map - Nouveau store créé : ' . $store->getNom();
-            $mail->Body    = $message;
+            $mail->Body = $message;
             $mail->AltBody = "LEGO Map - Nouveau store créé : {$store->getNom()}";
 
             $mail->send();

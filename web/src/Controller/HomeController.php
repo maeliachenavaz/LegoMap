@@ -4,22 +4,24 @@ namespace App\Controller;
 
 class HomeController extends BaseController
 {
-    /**
-     * Page d'accueil : Liste des stores avec filtres et tris
-     */
     public function index(): void
     {
-        // callApi gère la vérification de session et le refresh token automatiquement
-        $result = $this->callApi('http://api/stores');
+        if (!isset($_SESSION['cached_stores'])) {
+            $result = $this->callApi('http://api/stores');
+            if (is_array($result) && !isset($result['error'])) {
+                $_SESSION['cached_stores'] = $result;
+            }
+        }
 
-        $stores = [];
+        $allStores = $_SESSION['cached_stores'] ?? [];
+        $result = $allStores;
+
         $query = isset($_GET['q']) ? trim($_GET['q']) : '';
         $sort  = $_GET['sort'] ?? '';
 
         if (is_array($result) && !isset($result['error'])) {
             $stores = $result;
 
-            // 🔎 FILTRAGE (Nom ou Ville)
             if ($query !== '') {
                 $search = strtolower($query);
                 $stores = array_filter($stores, function ($store) use ($search) {
@@ -30,7 +32,6 @@ class HomeController extends BaseController
                 $stores = array_values($stores);
             }
 
-            // ⭐ TRI (Avis)
             if ($sort === 'asc') {
                 usort($stores, fn($a, $b) => ($a['avis'] ?? 0) <=> ($b['avis'] ?? 0));
             } elseif ($sort === 'desc') {
@@ -38,17 +39,21 @@ class HomeController extends BaseController
             }
         }
 
+        $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
+
+        if ($isAjax) {
+            echo $this->twig->render('Template/list_item.html.twig', [
+                'stores' => $stores
+            ]);
+            exit;
+        }
+
         echo $this->twig->render('home.html.twig', [
-            'title'  => 'Accueil',
             'stores' => $stores,
-            'q'      => $query,
-            'sort'   => $sort
+            'q' => $query,
+            'sort' => $sort
         ]);
     }
-
-    /**
-     * Liste des utilisateurs (hors administrateurs)
-     */
     public function users(): void
     {
         $result = $this->callApi('http://api/users');
@@ -56,7 +61,6 @@ class HomeController extends BaseController
         $users = [];
         if (is_array($result) && !isset($result['error'])) {
             $users = array_filter($result, function($u) {
-                // On exclut les admins de la liste
                 return isset($u['role']) && strtolower($u['role']) !== 'admin';
             });
         }

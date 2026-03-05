@@ -12,7 +12,6 @@ class Router
     {
         $path = parse_url($uri, PHP_URL_PATH);
 
-        // --- ROUTES STATIQUES ---
         switch ($path) {
             case '/':
                 (new HomeController())->index();
@@ -26,7 +25,7 @@ class Router
                 (new UserController())->logout();
                 return;
 
-            case '/users': // <--- AJOUTE CETTE ROUTE
+            case '/users':
                 (new HomeController())->users();
                 return;
 
@@ -39,7 +38,10 @@ class Router
                 return;
         }
 
-        // --- ROUTE DYNAMIQUE /store/{id} ---
+        /**
+         * Store
+         */
+
         if (preg_match('#^/store/([\w-]+)$#', $path, $matches)) {
             // Ici on capture aussi les UUID avec des "-"
             $id = $matches[1];
@@ -47,7 +49,6 @@ class Router
             return;
         }
 
-        // --- ROUTE DYNAMIQUE /store/{id}/edit ---
         if (preg_match('#^/store/([\w-]+)/edit$#', $path, $matches)) {
             $id = $matches[1];
             if ($_SERVER['REQUEST_METHOD'] === 'GET' || $_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -68,7 +69,6 @@ class Router
             }
         }
 
-        // --- ROUTE DYNAMIQUE /store/{id}/pdf ---
         if (preg_match('#^/store/([\w-]+)/pdf$#', $path, $matches)) {
             $id = $matches[1];
             (new StoreController())->pdf($id);
@@ -80,6 +80,10 @@ class Router
             (new StoreController())->preview($id);
             return;
         }
+
+        /**
+         * User
+         */
 
         if (preg_match('#^/users/edit/([\w-]+)$#', $path, $matches)) {
             (new UserController())->edit($matches[1]);

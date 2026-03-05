@@ -4,22 +4,17 @@ namespace App\Controller;
 
 class UserController extends BaseController
 {
-    /**
-     * Connexion à l'espace Admin
-     */
     public function login(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
 
-            // Appel direct à l'API sans token (méthode login)
             $result = $this->callApi('http://api/login', 'POST', [
                 'email' => $email,
                 'password' => $password
             ]);
 
-            // Si l'API renvoie une erreur ou que le rôle n'est pas admin
             if (isset($result['error'])) {
                 echo $this->twig->render('login.html.twig', [
                     'error' => $result['error']
@@ -35,7 +30,6 @@ class UserController extends BaseController
                 return;
             }
 
-            // Succès : On stocke les tokens en session
             $_SESSION['user_tokens'] = $result;
             header('Location: /');
             exit;
@@ -44,12 +38,8 @@ class UserController extends BaseController
         echo $this->twig->render('login.html.twig');
     }
 
-    /**
-     * Déconnexion
-     */
     public function logout(): void
     {
-        // Optionnel : Appeler l'API logout pour invalider le refresh token en DB
         $this->callApi('http://api/logout', 'POST');
 
         session_destroy();
@@ -57,9 +47,6 @@ class UserController extends BaseController
         exit;
     }
 
-    /**
-     * Création d'un utilisateur
-     */
     public function create(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -86,12 +73,8 @@ class UserController extends BaseController
         echo $this->twig->render('user_form.html.twig', ['title' => 'Ajouter un utilisateur']);
     }
 
-    /**
-     * Edition d'un utilisateur
-     */
     public function edit(string $id): void
     {
-        // 1. Récupération des données actuelles
         $user = $this->callApi("http://api/users/$id");
 
         if (!$user || isset($user['error'])) {
@@ -99,7 +82,6 @@ class UserController extends BaseController
             exit;
         }
 
-        // 2. Traitement de la modification
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = [
                 'name'  => $_POST['name'] ?? '',
@@ -131,9 +113,6 @@ class UserController extends BaseController
         ]);
     }
 
-    /**
-     * Suppression d'un utilisateur
-     */
     public function delete(string $id): void
     {
         $result = $this->callApi("http://api/users/$id", 'DELETE');

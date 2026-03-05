@@ -20,6 +20,20 @@ class ApiClient {
         }
         return handler.next(options);
       },
+      onResponse: (response, handler) async {
+        final newAccess = response.headers.value('X-New-Access-Token');
+        final newRefresh = response.headers.value('X-New-Refresh-Token');
+
+        if (newAccess != null) {
+          final userId = await _authRepo.getUserId();
+          await _authRepo.saveAuthData(
+              newAccess,
+              userId ?? '',
+              refreshToken: newRefresh
+          );
+        }
+        return handler.next(response);
+      },
       onError: (DioException e, handler) async {
         if (e.response?.statusCode == 401) {
           String? refreshToken = await _authRepo.getRefreshToken();

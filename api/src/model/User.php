@@ -12,11 +12,6 @@ class User
     private string $email;
     private string $password;
     private Role $role;
-
-    /* =========================
-       Getters / Setters
-    ==========================*/
-
     public function getId(): string
     {
         return $this->id;
@@ -170,8 +165,6 @@ class User
 
         return $user;
     }
-
-    // Dans api/src/model/User.php
 
     public static function findAll(): array
     {

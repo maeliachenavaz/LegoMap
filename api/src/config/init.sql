@@ -20,9 +20,6 @@ CREATE TABLE user (
     UNIQUE KEY unique_email (email)
 );
 
-ALTER TABLE user MODIFY id CHAR(36) NOT NULL DEFAULT (UUID());
-ALTER TABLE user ADD COLUMN role ENUM('admin', 'user') NOT NULL DEFAULT 'user' AFTER password;
-
 CREATE TABLE store (
     id CHAR(36) NOT NULL,
     nom VARCHAR(255) NOT NULL,
@@ -66,6 +63,12 @@ CREATE TABLE refresh_token (
         ON DELETE CASCADE
 );
 
+/**
+  ALTER TABLE
+ */
+
+ALTER TABLE user MODIFY id CHAR(36) NOT NULL DEFAULT (UUID());
+ALTER TABLE user ADD COLUMN role ENUM('admin', 'user') NOT NULL DEFAULT 'user' AFTER password;
 ALTER TABLE refresh_token MODIFY jti CHAR(36) NOT NULL;
 
 /**

@@ -39,54 +39,46 @@
             </select>
         </div>
 
-        <button type="submit" class="bg-red-800 text-white font-bold px-6 py-3 rounded-xl hover:bg-red-900 transition focus:ring-4 focus:ring-red-300">
-            Filtrer
-        </button>
-
         <a href="/" class="bg-white text-red-800 font-bold px-6 py-3 rounded-xl hover:bg-gray-100 transition border-2 border-red-800 flex items-center justify-center">
             Réinitialiser
         </a>
     </form>
 
-    {# Affichage des résultats #}
-    {% if stores is empty %}
-        <div class="bg-white p-12 rounded-2xl text-center shadow-inner border-2 border-dashed border-gray-300" role="status">
-            <p class="text-xl text-gray-600 font-medium">Aucun store trouvé pour votre recherche.</p>
-        </div>
-    {% else %}
-        <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" aria-label="Liste des boutiques LEGO">
-            {% for store in stores %}
-                <li>
-                    <article>
-                        <a href="/store/{{ store.id }}" class="group relative bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:scale-[1.03] hover:border-red-700 border-4 border-transparent block focus:ring-offset-4 focus:ring-offset-yellow-400">
+    <ul id="store-results-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" aria-label="Liste des boutiques LEGO">
+        {% include 'Template/list_item.html.twig' %}
+    </ul>
 
-                            {# Zone Image #}
-                            <div class="w-full h-48 bg-gray-200 overflow-hidden">
-                                {% if store.photo %}
-                                    <img src="{{ store.photo[:5] == 'data:' ? store.photo : 'data:image/jpeg;base64,' ~ store.photo }}"
-                                         alt="Façade du store {{ store.nom }}"
-                                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                                {% else %}
-                                    <div class="w-full h-full flex items-center justify-center bg-gray-300" aria-hidden="true">
-                                        <span class="text-5xl">🧱</span>
-                                    </div>
-                                {% endif %}
-                            </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search-input');
+            const sortSelect = document.getElementById('sort-select');
+            const storeList = document.getElementById('store-results-container');
+            let timeout = null;
 
-                            {# Zone Détails #}
-                            <div class="p-6 space-y-3">
-                                <h3 class="font-bold text-2xl text-red-800 group-hover:text-red-700">{{ store.nom }}</h3>
+            const updateResults = () => {
+                const query = searchInput.value;
+                const sort = sortSelect.value;
 
-                                <div class="flex items-center gap-2 bg-gray-50 px-3 py-1 rounded-full w-fit border border-gray-200"
-                                     aria-label="Note de {{ store.avis }} sur 5">
-                                    <span class="text-xl font-black text-gray-700" aria-hidden="true">{{ store.avis }} / 5</span>
-                                    <span class="text-amber-500 text-2xl" aria-hidden="true">★</span>
-                                </div>
-                            </div>
-                        </a>
-                    </article>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+                storeList.style.opacity = '0.5';
+
+                const url = `/?q=${encodeURIComponent(query)}&sort=${encodeURIComponent(sort)}`;
+
+                fetch(url, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                    .then(response => response.text())
+                    .then(html => {
+                        storeList.innerHTML = html;
+                        storeList.style.opacity = '1';
+                    });
+            };
+
+            searchInput.addEventListener('input', function() {
+                clearTimeout(timeout);
+                timeout = setTimeout(updateResults, 300);
+            });
+
+            sortSelect.addEventListener('change', updateResults);
+        });
+    </script>
 {% endblock %}

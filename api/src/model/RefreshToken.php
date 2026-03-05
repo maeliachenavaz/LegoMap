@@ -15,8 +15,6 @@ class RefreshToken
     private ?string $created_at = null;
     private ?string $updated_at = null;
 
-    // --- Getters ---
-
     public function getId(): ?string
     {
         return $this->id;
@@ -52,8 +50,6 @@ class RefreshToken
         return $this->updated_at;
     }
 
-    // --- Setters ---
-
     public function setId(string $id): self
     {
         $this->id = $id;
@@ -84,24 +80,19 @@ class RefreshToken
         return $this;
     }
 
-    // --- Méthodes Statiques ---
-
     public static function create(RefreshToken $refreshToken): bool
     {
         $db = Database::getConnection();
 
-        // 1. On génère l'ID (UUID) pour la clé primaire de la table
-        // Note : C'est différent du JTI qui est l'ID du token JWT lui-même
         $refreshToken->id = self::generateUuid();
 
-        // 2. On ajoute 'id' dans la requête INSERT
         $stmt = $db->prepare('
             INSERT INTO refresh_token (id, user_id, token_hash, jti, expires_at) 
             VALUES (:id, :user_id, :token_hash, :jti, :expires_at)
         ');
 
         return $stmt->execute([
-            ':id' => $refreshToken->getId(), // <--- L'élément manquant était ici
+            ':id' => $refreshToken->getId(),
             ':user_id' => $refreshToken->getUserId(),
             ':jti' => $refreshToken->getJti(),
             ':token_hash' => $refreshToken->getTokenHash(),
@@ -115,21 +106,18 @@ class RefreshToken
         $stmt = $db->prepare('SELECT * FROM refresh_token WHERE token_hash = :token_hash');
         $stmt->execute([':token_hash' => $token_hash]);
 
-        // On fetch en mode tableau associatif pour éviter les soucis de constructeur
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$data) {
             return null;
         }
 
-        // On reconstruit l'objet manuellement pour être sûr
         $token = new self();
         $token->setId($data['id']);
         $token->setUserId($data['user_id']);
         $token->setTokenHash($data['token_hash']);
         $token->setJti($data['jti']);
         $token->setExpiresAt($data['expires_at']);
-        // created_at et updated_at sont gérés par MySQL, pas besoin de setters spécifiques si on ne les modifie pas
 
         return $token;
     }
@@ -159,8 +147,6 @@ class RefreshToken
         $stmt = $db->prepare('DELETE FROM refresh_token WHERE user_id = :user_id');
         return $stmt->execute([':user_id' => $userId]);
     }
-
-    // --- Helper UUID ---
 
     private static function generateUuid(): string
     {

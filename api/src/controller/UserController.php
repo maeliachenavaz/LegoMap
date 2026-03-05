@@ -52,11 +52,9 @@ class UserController
 
     public static function logout() : void
     {
-        // 1. Lire le JSON brut depuis le body
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
 
-        // 2. Récupérer l'user_id
         $userId = $data['user_id'] ?? null;
 
         if (!$userId) {
@@ -65,7 +63,6 @@ class UserController
             return;
         }
 
-        // 3. Supprimer les tokens en base
         $success = AuthService::logout($userId);
 
         if ($success) {
@@ -80,7 +77,6 @@ class UserController
     public static function addUser(): void
     {
         try {
-            // 1. Sécurité : Vérifier le token et le rôle Admin
             $authData = AuthService::checkAndRefresh();
             $currentUser = User::getById($authData['user_id']);
 
@@ -90,7 +86,6 @@ class UserController
                 return;
             }
 
-            // 2. Récupérer les données JSON
             $data = json_decode(file_get_contents('php://input'), true);
 
             if (!isset($data['name'], $data['email'], $data['password'])) {
@@ -99,13 +94,11 @@ class UserController
                 return;
             }
 
-            // 3. Création de l'objet User
             $user = new User();
             $user->setName($data['name']);
             $user->setEmail($data['email']);
-            $user->setPassword($data['password']); // Sera haché dans la méthode create()
+            $user->setPassword($data['password']);
 
-            // On force le rôle USER pour les nouveaux comptes créés par l'admin
             $user->setRole(\api\model\Role::USER);
 
             $id = $user->create();
@@ -125,34 +118,52 @@ class UserController
 
     public static function getUser(string $id): void
     {
-        AuthService::checkAndRefresh();
+        try {
+            $authData = AuthService::checkAndRefresh();
+            $loggedUserId = $authData['user_id'];
 
-        $user = User::getById($id);
+            $currentUser = User::getById($loggedUserId);
 
-        if (!$user) {
-            http_response_code(404);
-            echo json_encode(['error' => 'Utilisateur non trouvé']);
-            return;
+            $currentUserRole = $currentUser->getRole()->value;
+
+            if ($id !== $loggedUserId && strtolower($currentUserRole) !== 'admin') {
+                http_response_code(403);
+                echo json_encode(['error' => 'Accès interdit : vous ne pouvez consulter que votre propre profil.']);
+                return;
+            }
+
+            $user = User::getById($id);
+
+            if (!$user) {
+                http_response_code(404);
+                echo json_encode(['error' => 'Utilisateur non trouvé']);
+                return;
+            }
+
+            http_response_code(200);
+            echo $user->toJson();
+        } catch (\Exception $e) {
+            http_response_code(401);
+            echo json_encode(['error' => $e->getMessage()]);
         }
-
-        http_response_code(200);
-        echo $user->toJson();
     }
-
-    // Dans api/src/controller/UserController.php
 
     public static function getAllUsers(): void
     {
         try {
-            // 1. Vérifier si l'appelant est bien admin (sécurité API)
-            AuthService::checkAndRefresh();
+            $authData = AuthService::checkAndRefresh();
+            $currentUser = User::getById($authData['user_id']);
 
-            // 2. Récupérer tous les users via le modèle
-            $users = User::findAll(); // On va créer findAll() juste après
+            if (!$currentUser || $currentUser->getRole() !== \api\model\Role::ADMIN) {
+                http_response_code(403);
+                echo json_encode(['error' => 'Accès interdit : privilèges administrateur requis.']);
+                return;
+            }
+
+            $users = User::findAll();
 
             $data = [];
             foreach ($users as $user) {
-                // On utilise votre méthode toJsonArray ou manuellement :
                 $data[] = [
                     'id'    => $user->getId(),
                     'name'  => $user->getName(),
@@ -171,70 +182,80 @@ class UserController
 
     public static function updateUser(string $id): void
     {
-        AuthService::checkAndRefresh();
+        try {
+            $authData = AuthService::checkAndRefresh();
+            $loggedUserId = $authData['user_id'];
+            $currentUser = User::getById($loggedUserId);
 
-        $user = User::getById($id);
+            if ($id !== $loggedUserId && $currentUser->getRole() !== \api\model\Role::ADMIN) {
+                http_response_code(403);
+                echo json_encode(['error' => 'Accès interdit : modification non autorisée.']);
+                return;
+            }
 
-        if (!$user) {
-            http_response_code(404);
-            echo json_encode(['error' => 'Utilisateur non trouvé']);
-            return;
-        }
+            $userToUpdate = User::getById($id);
+            if (!$userToUpdate) {
+                http_response_code(404);
+                echo json_encode(['error' => 'Utilisateur non trouvé']);
+                return;
+            }
 
-        $data = json_decode(file_get_contents('php://input'), true);
-        error_log("Data reçue : " . print_r($data, true)); // Regardez vos logs serveurs
+            $data = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($data['name'])) $user->setName($data['name']);
-        if (isset($data['email'])) $user->setEmail($data['email']);
-        if (isset($data['password'])) $user->setPassword($data['password']);
+            if (isset($data['name'])) $userToUpdate->setName($data['name']);
+            if (isset($data['email'])) $userToUpdate->setEmail($data['email']);
+            if (isset($data['password'])) $userToUpdate->setPassword($data['password']);
 
-        $success = $user->update();
-
-        if ($success) {
-            http_response_code(200);
-            echo $user->toJson();
-        } else {
-            http_response_code(500);
-            echo json_encode(['error' => 'Erreur lors de la mise à jour']);
+            if ($userToUpdate->update()) {
+                http_response_code(200);
+                echo $userToUpdate->toJson();
+            } else {
+                http_response_code(500);
+                echo json_encode(['error' => 'Erreur lors de la mise à jour']);
+            }
+        } catch (\Exception $e) {
+            http_response_code(401);
+            echo json_encode(['error' => $e->getMessage()]);
         }
     }
 
     public static function deleteUser(string $id): void
     {
-        AuthService::checkAndRefresh();
+        try {
+            $authData = AuthService::checkAndRefresh();
+            $loggedUserId = $authData['user_id'];
+            $currentUser = User::getById($loggedUserId);
 
-        $userToDelete = User::getById($id);
+            $userToDelete = User::getById($id);
 
-        $authData = AuthService::checkAndRefresh();
+            if ($id !== $loggedUserId && $currentUser->getRole() !== \api\model\Role::ADMIN) {
+                http_response_code(403);
+                echo json_encode(['error' => 'Accès interdit : vous ne pouvez pas supprimer ce compte.']);
+                return;
+            }
 
-        $currentUser = User::getById($authData['user_id']);
+            if (!$userToDelete) {
+                http_response_code(404);
+                echo json_encode(['error' => 'Utilisateur non trouvé']);
+                return;
+            }
 
-        if ($currentUser->getRole() !== \api\model\Role::ADMIN) {
-            http_response_code(403);
-            echo json_encode(['error' => 'Seul un administrateur peut supprimer des comptes.']);
-            return;
-        }
+            if ($userToDelete->getRole() === \api\model\Role::ADMIN && $id !== $loggedUserId) {
+                http_response_code(403);
+                echo json_encode(['error' => 'Interdiction de supprimer un autre compte administrateur.']);
+                return;
+            }
 
-        if (!$userToDelete) {
-            http_response_code(404);
-            echo json_encode(['error' => 'Utilisateur non trouvé']);
-            return;
-        }
-
-        if ($userToDelete->getRole() === \api\model\Role::ADMIN) {
-            http_response_code(403); // Forbidden
-            echo json_encode(['error' => 'Interdiction de supprimer un compte administrateur.']);
-            return;
-        }
-
-        $success = User::delete($id);
-
-        if ($success) {
-            http_response_code(200);
-            echo json_encode(['message' => 'Utilisateur supprimé avec succès']);
-        } else {
-            http_response_code(500);
-            echo json_encode(['error' => 'Erreur lors de la suppression en base de données']);
+            if (User::delete($id)) {
+                http_response_code(200);
+                echo json_encode(['message' => 'Compte supprimé avec succès']);
+            } else {
+                http_response_code(500);
+                echo json_encode(['error' => 'Erreur lors de la suppression']);
+            }
+        } catch (\Exception $e) {
+            http_response_code(401);
+            echo json_encode(['error' => $e->getMessage()]);
         }
     }
 }

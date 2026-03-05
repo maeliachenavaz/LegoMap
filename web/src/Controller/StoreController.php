@@ -4,9 +4,6 @@ namespace App\Controller;
 
 class StoreController extends BaseController
 {
-    /**
-     * Création d'un store
-     */
     public function create(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -42,10 +39,6 @@ class StoreController extends BaseController
 
         echo $this->twig->render('create_store.html.twig');
     }
-
-    /**
-     * Détail d'un store (Protégé)
-     */
     public function detail(string $id): void
     {
         $store = $this->callApi("http://api/stores/$id");
@@ -58,12 +51,8 @@ class StoreController extends BaseController
         echo $this->twig->render('store_detail.html.twig', ['store' => $store]);
     }
 
-    /**
-     * Modification d'un store (Protégé)
-     */
     public function edit(string $id): void
     {
-        // On récupère les données actuelles
         $store = $this->callApi("http://api/stores/$id");
 
         if (!$store || isset($store['error'])) {
@@ -106,9 +95,6 @@ class StoreController extends BaseController
         echo $this->twig->render('edit_store.html.twig', ['store' => $store]);
     }
 
-    /**
-     * Suppression d'un store
-     */
     public function delete(string $id): void
     {
         $result = $this->callApi("http://api/stores/$id", 'DELETE');
@@ -124,9 +110,6 @@ class StoreController extends BaseController
         ]);
     }
 
-    /**
-     * Preview publique (Pas besoin de token, mais callApi gère quand même)
-     */
     public function preview(string $id): void
     {
         $store = $this->callApi("http://api/stores/preview/$id");
@@ -139,19 +122,15 @@ class StoreController extends BaseController
         echo $this->twig->render('store_preview.html.twig', ['store' => $store]);
     }
 
-    /**
-     * Génération PDF
-     */
     public function pdf(string $id): void
     {
-        $store = $this->callApi("http://api/stores/$id");
+        $store = $this->callApi("http://api/stores/preview/$id", 'GET', null, false);
 
         if (!$store || isset($store['error'])) {
-            header("Location: /store/$id?error=not_found");
+            header("Location: /?error=preview_not_found");
             exit;
         }
 
-        // Reverse Geocoding (Nominatim)
         $address = "Adresse non disponible";
         $geoContext = stream_context_create(["http" => ["header" => "User-Agent: LegoMap/1.0\r\n"]]);
         $geoResult = @file_get_contents("https://nominatim.openstreetmap.org/reverse?format=json&lat={$store['latitude']}&lon={$store['longitude']}", false, $geoContext);

@@ -10,9 +10,12 @@ use Exception;
 
 class AuthService
 {
+
+    /**
+     * Permet de récupérer la clé secrète du JWT.
+     */
     private static function secret(): string
     {
-        // On s'assure que la clé existe, sinon on lève une exception claire
         if (!isset($_ENV['JWT_SECRET'])) {
             throw new Exception("JWT_SECRET non défini dans l'environnement.");
         }
@@ -20,7 +23,7 @@ class AuthService
     }
 
     /**
-     * Génère un UUID v4 pour les JTI (Refresh Tokens)
+     * Génère un UUID v4 pour les JTI (Refresh Tokens).
      */
     private static function generateUuid(): string
     {
@@ -31,7 +34,7 @@ class AuthService
     }
 
     /**
-     * Vérifie l'access token et le rafraîchit si nécessaire via le header
+     * Vérifie l'access token et le rafraîchit si nécessaire via le header.
      */
     public static function checkAndRefresh(): array
     {
@@ -53,10 +56,10 @@ class AuthService
             $decoded = JWT::decode($jwt, new Key(self::secret(), 'HS256'));
             return [
                 'user_id' => $decoded->sub,
-                'access_token' => $jwt
+                'access_token' => $jwt,
+                'role' => $decoded->role,
             ];
         } catch (\Firebase\JWT\ExpiredException $e) {
-            // Si expiré, on cherche le refresh token dans les headers
             $refreshTokenPlain = $headers['X-Refresh-Token'] ?? $headers['x-refresh-token'] ?? null;
 
             if (!$refreshTokenPlain) {
@@ -68,7 +71,6 @@ class AuthService
             try {
                 $tokens = self::refresh($refreshTokenPlain);
 
-                // On renvoie les nouveaux tokens dans les headers pour que le client les mette à jour
                 header('X-New-Access-Token: ' . $tokens['access_token']);
                 header('X-New-Refresh-Token: ' . $tokens['refresh_token']);
 
@@ -87,7 +89,7 @@ class AuthService
     }
 
     /**
-     * Inscription d'un nouvel utilisateur
+     * Inscription d'un nouvel utilisateur.
      */
     public static function register(string $name, string $email, string $password, string $role): array
     {
@@ -109,12 +111,11 @@ class AuthService
             throw new Exception("Erreur lors de la création de l'utilisateur.");
         }
 
-        // On génère directement les tokens après l'inscription
         return self::generateTokens($userId);
     }
 
     /**
-     * Connexion
+     * Connexion.
      */
     public static function login(string $email, string $password): array
     {
@@ -137,7 +138,6 @@ class AuthService
         $user = User::getById($userId);
         $roleValue = $user ? $user->getRole()->value : 'USER';
 
-        // 1. Access Token (15 minutes)
         $accessPayload = [
             'iss' => 'legomap',
             'sub' => $userId,
@@ -147,34 +147,32 @@ class AuthService
         ];
         $accessToken = JWT::encode($accessPayload, self::secret(), 'HS256');
 
-        // 2. Refresh Token
         $refreshTokenPlain = bin2hex(random_bytes(64));
         $refreshTokenHash = hash('sha256', $refreshTokenPlain);
         $jti = self::generateUuid();
 
         $refresh = new RefreshToken();
-        $refresh->setJti($jti); // Crucial pour ne pas avoir l'erreur 1364
+        $refresh->setJti($jti);
         $refresh->setUserId($userId);
         $refresh->setTokenHash($refreshTokenHash);
-        // Expire dans 7 jours
         $refresh->setExpiresAt(date('Y-m-d H:i:s', $now + (60 * 60 * 24 * 7)));
 
-        // Sauvegarde en base
+
         if (!RefreshToken::create($refresh)) {
             throw new Exception("Impossible de créer la session (Refresh Token).");
         }
 
         return [
-            'user_id'       => $userId,
-            'role'          => $roleValue,
-            'access_token'  => $accessToken,
+            'user_id' => $userId,
+            'role' => $roleValue,
+            'access_token' => $accessToken,
             'refresh_token' => $refreshTokenPlain,
-            'expires_in'    => 900
+            'expires_in' => 900
         ];
     }
 
     /**
-     * Rafraîchit les tokens à partir d'un refresh token valide
+     * Rafraîchit les tokens à partir d'un refresh token valide.
      */
     public static function refresh(string $refreshTokenPlain): array
     {
@@ -190,13 +188,13 @@ class AuthService
             throw new Exception("Session expirée.");
         }
 
-        // On supprime l'ancien refresh token (usage unique)
         RefreshToken::deleteByJti($stored->getJti());
-
-        // On en génère des nouveaux
         return self::generateTokens($stored->getUserId());
     }
 
+    /**
+     * Déconnexion.
+     */
     public static function logout(string $userId): bool
     {
         return RefreshToken::deleteByUserId($userId);

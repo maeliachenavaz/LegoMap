@@ -12,7 +12,6 @@ class Database
     public static function getConnection(): PDO
     {
         if (self::$instance === null) {
-            // Vérification si les clés existent pour éviter les Warnings
             $requiredKeys = ['DB_HOST', 'DB_PORT', 'DB_NAME', 'DB_USER', 'DB_PASSWORD'];
             foreach ($requiredKeys as $key) {
                 if (!isset($_ENV[$key])) {
@@ -33,7 +32,6 @@ class Database
                 self::$instance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
                 self::$instance->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
             } catch (PDOException $e) {
-                // On affiche le vrai message pour débugger
                 throw new \Exception("Détails SQL : " . $e->getMessage());
             }
         }
