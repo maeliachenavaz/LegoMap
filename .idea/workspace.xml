@@ -39,6 +39,7 @@
     "Flutter.debug.executor": "Run",
     "Flutter.main.dart.executor": "Run",
     "Flutter.release.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -62,7 +63,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Flutter.debug">
+  <component name="RunManager">
     <configuration name="debug" type="FlutterRunConfigurationType" factoryName="Flutter">
       <option name="additionalArgs" value="--debug" />
       <option name="filePath" value="$PROJECT_DIR$/lego_map/lib/main.dart" />
@@ -90,6 +91,7 @@
       <option name="presentableId" value="Default" />
       <updated>1772620403593</updated>
       <workItem from="1772648311846" duration="824000" />
+      <workItem from="1772711559198" duration="22000" />
     </task>
     <servers />
   </component>

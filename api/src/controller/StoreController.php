@@ -101,13 +101,6 @@ class StoreController
     {
         try {
             $auth = AuthService::checkAndRefresh();
-            $currentUser = \api\model\User::getById($auth['user_id']);
-
-            if (!$currentUser || $currentUser->getRole() !== \api\model\Role::ADMIN) {
-                http_response_code(403);
-                echo json_encode(['error' => 'Accès interdit : Seul un administrateur peut voir tous les stores.']);
-                return;
-            }
 
             $page = isset($_GET['page']) ? (int)$_GET['page'] : null;
             $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 1000;
