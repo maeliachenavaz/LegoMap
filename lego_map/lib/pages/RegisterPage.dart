@@ -98,7 +98,6 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 30),
 
-              // Carte Formulaire
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -214,7 +213,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return InputDecoration(
       hintText: hint,
       prefixIcon: Icon(icon, color: Colors.black),
-      suffixIcon: suffixIcon, // On l'utilise ici
+      suffixIcon: suffixIcon,
       filled: true,
       fillColor: bgGray,
       contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),

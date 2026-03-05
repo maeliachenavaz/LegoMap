@@ -9,14 +9,12 @@ class StoreDetailPage extends StatelessWidget {
 
   const StoreDetailPage({super.key, required this.store});
 
-  // Couleurs LEGO
   final Color legoRed = const Color(0xFFD11013);
   final Color legoYellow = const Color(0xFFFACB16);
   final Color bgGray = const Color(0xFFF3F4F6);
 
   @override
   Widget build(BuildContext context) {
-    // Coordonnées pour la carte
     final LatLng storeLocation = LatLng(store.latitude, store.longitude);
 
     return Scaffold(
@@ -42,7 +40,6 @@ class StoreDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image Header
             Container(
               height: 250,
               width: double.infinity,
@@ -65,7 +62,6 @@ class StoreDetailPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Ligne Titre et Note
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -94,7 +90,6 @@ class StoreDetailPage extends StatelessWidget {
 
                   const Divider(height: 40, thickness: 2, color: Colors.black),
 
-                  // Section À Propos
                   const Text(
                       "À PROPOS",
                       style: TextStyle(fontWeight: FontWeight.w900, fontSize: 18)
@@ -107,13 +102,11 @@ class StoreDetailPage extends StatelessWidget {
 
                   const SizedBox(height: 30),
 
-                  // Section Contact
                   _buildInfoTile(Icons.person, "CONTACT", store.contactNom),
                   _buildInfoTile(Icons.email, "EMAIL", store.contactEmail),
 
                   const SizedBox(height: 25),
 
-                  // CARTE OPENSTREETMAP
                   const Text(
                       "LOCALISATION",
                       style: TextStyle(fontWeight: FontWeight.w900, fontSize: 18)

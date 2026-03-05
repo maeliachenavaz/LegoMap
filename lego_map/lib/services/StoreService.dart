@@ -7,7 +7,6 @@ import 'ApiClient.dart';
 class StoreService extends ApiClient {
   Future<List<Store>> getAllStores({int? page, int? limit}) async {
     try {
-      // On prépare les paramètres de requête
       final Map<String, dynamic> queryParams = {};
 
       if (page != null) queryParams['page'] = page;

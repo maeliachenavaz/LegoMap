@@ -15,13 +15,12 @@ class _PersonnalPageState extends State<PersonnalPage> {
   final StoreService _storeService = StoreService();
   final ScrollController _scrollController = ScrollController();
 
-  // État des données
   List<Store> _myStores = [];
-  bool _isLoading = true;          // Chargement initial
-  bool _isLoadingMore = false;     // Chargement pagination
-  bool _hasMoreData = true;        // Stop si plus de données
+  bool _isLoading = true;
+  bool _isLoadingMore = false;
+  bool _hasMoreData = true;
   int _currentPage = 1;
-  final int _pageSize = 4;         // Taille du lot
+  final int _pageSize = 4;
 
   final Color legoRed = const Color(0xFF7F1D1D);
   final Color legoYellow = const Color(0xFFFACB16);
@@ -40,7 +39,6 @@ class _PersonnalPageState extends State<PersonnalPage> {
     super.dispose();
   }
 
-  // Détection du scroll à 80%
   void _onScroll() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.8) {
       if (!_isLoadingMore && _hasMoreData) {
@@ -49,7 +47,6 @@ class _PersonnalPageState extends State<PersonnalPage> {
     }
   }
 
-  // Chargement initial (Page 1)
   Future<void> _fetchInitialStores() async {
     setState(() {
       _isLoading = true;
@@ -58,7 +55,6 @@ class _PersonnalPageState extends State<PersonnalPage> {
     });
 
     try {
-      // Note: Assure-toi que getMyStores accepte aussi page et limit dans ton StoreService
       final fetchedStores = await _storeService.getMyStores(
         page: _currentPage,
         limit: _pageSize,
@@ -75,7 +71,6 @@ class _PersonnalPageState extends State<PersonnalPage> {
     }
   }
 
-  // Chargement des pages suivantes
   Future<void> _fetchNextPage() async {
     setState(() => _isLoadingMore = true);
     _currentPage++;
@@ -126,7 +121,7 @@ class _PersonnalPageState extends State<PersonnalPage> {
           IconButton(
             onPressed: () async {
               await AppRouter.router.push('/personnal/create');
-              _fetchInitialStores(); // Rafraîchit tout après création
+              _fetchInitialStores();
             },
             icon: const Icon(Icons.add_circle, color: Colors.black, size: 30),
           ),
@@ -144,11 +139,9 @@ class _PersonnalPageState extends State<PersonnalPage> {
           controller: _scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.all(16.0),
-          // On ajoute +1 pour le Header, et éventuellement +1 pour le Loader
           itemCount: 1 + _myStores.length + (_isLoadingMore ? 1 : 0),
           itemBuilder: (context, index) {
 
-            // 1. LE HEADER (Toujours à l'index 0)
             if (index == 0) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 20.0),
@@ -159,8 +152,6 @@ class _PersonnalPageState extends State<PersonnalPage> {
               );
             }
 
-            // 2. LE LOADER DE FIN
-            // Il apparaît si on est au dernier index possible
             if (index == _myStores.length + 1) {
               return const Center(
                 child: Padding(
@@ -170,8 +161,6 @@ class _PersonnalPageState extends State<PersonnalPage> {
               );
             }
 
-            // 3. LES STORES
-            // On utilise [index - 1] car l'index 0 est pris par le titre
             final store = _myStores[index - 1];
             return Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
@@ -187,7 +176,7 @@ class _PersonnalPageState extends State<PersonnalPage> {
     return InkWell(
         onTap: () async {
           await AppRouter.router.push('/personnal/manage/${store.id}', extra: store);
-          _fetchInitialStores(); // Rafraîchit après modification/suppression
+          _fetchInitialStores();
         },
         child: Container(
           decoration: BoxDecoration(
@@ -248,7 +237,7 @@ class _PersonnalPageState extends State<PersonnalPage> {
   }
 
   Widget _buildEmptyState() {
-    return ListView( // Nécessaire pour le RefreshIndicator
+    return ListView(
       children: [
         const SizedBox(height: 100),
         Icon(Icons.layers_clear, size: 80, color: legoYellow),

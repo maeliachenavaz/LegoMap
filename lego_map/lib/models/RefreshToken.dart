@@ -26,7 +26,6 @@ class RefreshToken {
       'token_hash': tokenHash,
       'jti': jti,
       'expires_at': expiresAt,
-      // Souvent géré par la DB, mais inclus si nécessaire
       'created_at': createdAt,
       'updated_at': updatedAt,
     };

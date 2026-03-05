@@ -23,7 +23,6 @@ class _ProfilPageState extends State<ProfilPage> {
   late TextEditingController _nameController;
   late TextEditingController _emailController;
 
-  // Palette LEGO
   final Color legoRed = const Color(0xFFD11013);
   final Color legoYellow = const Color(0xFFFACB16);
   final Color bgGray = const Color(0xFFF3F4F6);
@@ -111,7 +110,7 @@ class _ProfilPageState extends State<ProfilPage> {
     return Scaffold(
       backgroundColor: bgGray,
       appBar: AppBar(
-        backgroundColor: legoYellow, // Retour au jaune ici
+        backgroundColor: legoYellow,
         elevation: 4,
         shadowColor: Colors.black.withOpacity(0.5),
         title: const Text(
@@ -130,7 +129,6 @@ class _ProfilPageState extends State<ProfilPage> {
         child: Column(
           children: [
             const SizedBox(height: 10),
-            // Avatar avec bordure noire épaisse
             Center(
               child: Container(
                 width: 120,
@@ -146,7 +144,6 @@ class _ProfilPageState extends State<ProfilPage> {
             ),
             const SizedBox(height: 30),
 
-            // Card d'informations
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -171,7 +168,7 @@ class _ProfilPageState extends State<ProfilPage> {
                         height: 55,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: legoRed, // Bouton d'action en rouge
+                            backgroundColor: legoRed,
                             foregroundColor: Colors.white,
                             side: const BorderSide(color: Colors.black, width: 2),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -216,7 +213,7 @@ class _ProfilPageState extends State<ProfilPage> {
                 child: OutlinedButton.icon(
                   style: OutlinedButton.styleFrom(
                     foregroundColor: legoRed,
-                    side: BorderSide(color: legoRed, width: 2), // Bordure rouge LEGO
+                    side: BorderSide(color: legoRed, width: 2),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     backgroundColor: Colors.white,
                   ),

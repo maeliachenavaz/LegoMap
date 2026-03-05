@@ -15,16 +15,14 @@ class _HomePageState extends State<HomePage> {
   final StoreService _storeService = StoreService();
   final ScrollController _scrollController = ScrollController();
 
-  // Données
   List<Store> _displayedStores = [];
 
-  // État de la pagination
-  bool _isLoading = true;              // Premier chargement
-  bool _isLoadingMore = false;         // Chargement des pages suivantes
-  bool _hasMoreData = true;            // Stop si l'API n'a plus rien
+  bool _isLoading = true;
+  bool _isLoadingMore = false;
+  bool _hasMoreData = true;
 
-  int _currentPage = 1;                // Page actuelle
-  final int _pageSize = 4;             // Nombre d'items par appel API
+  int _currentPage = 1;
+  final int _pageSize = 4;
 
   final Color legoRed = const Color(0xFF7F1D1D);
   final Color legoYellow = const Color(0xFFFACB16);
@@ -43,7 +41,6 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  // Détection du scroll à 80% pour déclencher l'appel API suivant
   void _onScroll() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.8) {
       if (!_isLoadingMore && _hasMoreData) {
@@ -52,7 +49,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  // APPEL API : PAGE 1
   Future<void> _fetchInitialStores() async {
     setState(() {
       _isLoading = true;
@@ -69,7 +65,6 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _displayedStores = fetchedStores;
         _isLoading = false;
-        // Si on reçoit moins que la limite, c'est qu'il n'y a plus de page suivante
         if (fetchedStores.length < _pageSize) _hasMoreData = false;
       });
     } catch (e) {
@@ -78,7 +73,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  // APPEL API : PAGES SUIVANTES
   Future<void> _fetchNextPage() async {
     setState(() => _isLoadingMore = true);
     _currentPage++;

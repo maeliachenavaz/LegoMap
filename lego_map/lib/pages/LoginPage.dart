@@ -18,10 +18,9 @@ class _LoginPageState extends State<LoginPage> {
   final UserService _userService = UserService();
   final AuthRepository _authRepo = AuthRepository();
 
-  // COULEURS LEGO AJUSTÉES
-  final Color legoRed = const Color(0xFFB91C1C);   // Rouge plus vif (red-700)
-  final Color legoYellow = const Color(0xFFFACB16); // Jaune LEGO officiel
-  final Color bgGray = const Color(0xFFF3F4F6);    // gray-100 du site
+  final Color legoRed = const Color(0xFFB91C1C);
+  final Color legoYellow = const Color(0xFFFACB16);
+  final Color bgGray = const Color(0xFFF3F4F6);
 
   bool _isLoading = false;
   bool _obscurePassword = true;
@@ -53,13 +52,12 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: legoYellow, // Fond Jaune LEGO pour un impact max au login
+      backgroundColor: legoYellow,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             children: [
-              // Logo : Épingle de localisation sur une brique
               Container(
                 padding: const EdgeInsets.all(15),
                 decoration: const BoxDecoration(
@@ -79,7 +77,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 30),
 
-              // Carte du formulaire (Style Site Web)
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
@@ -120,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _passwordController,
-                        obscureText: _obscurePassword, // Utilisation de la variable
+                        obscureText: _obscurePassword,
                         decoration: _inputDecoration(
                           "••••••••",
                           Icons.lock_outline,
@@ -144,7 +141,6 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                       const SizedBox(height: 32),
 
-                      // Bouton Rouge (bg-red-800) avec ombre noire
                       SizedBox(
                         width: double.infinity,
                         height: 55,
@@ -170,7 +166,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 32),
 
-              // Lien Register
               TextButton(
                 onPressed: () => context.push('/register'),
                 child: const Text(
@@ -193,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
     return InputDecoration(
       hintText: hint,
       prefixIcon: Icon(icon, color: Colors.black),
-      suffixIcon: suffixIcon, // Ajout du bouton ici
+      suffixIcon: suffixIcon,
       filled: true,
       fillColor: bgGray,
       border: OutlineInputBorder(

@@ -6,7 +6,6 @@ import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import '../models/Store.dart';
 import '../services/StoreService.dart';
-import '../router/Router.dart';
 
 class StoreManagePage extends StatefulWidget {
   final Store store;
@@ -43,7 +42,6 @@ class _StoreManagePageState extends State<StoreManagePage> {
     _contactEmailController = TextEditingController(text: _currentStore.contactEmail);
   }
 
-  // --- LOGIQUE SUPPRESSION ---
   Future<void> _deleteStore() async {
     final confirm = await showDialog<bool>(
       context: context,
@@ -185,7 +183,6 @@ class _StoreManagePageState extends State<StoreManagePage> {
             _buildField("EMAIL", _contactEmailController),
             const SizedBox(height: 30),
 
-            // --- BOUTON SAUVEGARDER (MODE EDITION) ---
             if (_isEditing)
               SizedBox(
                 width: double.infinity,
@@ -195,7 +192,6 @@ class _StoreManagePageState extends State<StoreManagePage> {
                   child: const Text("SAUVEGARDER", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                 ),
               )
-            // --- BOUTON SUPPRIMER (MODE LECTURE) ---
             else
               Center(
                 child: TextButton.icon(
@@ -225,9 +221,7 @@ class _StoreManagePageState extends State<StoreManagePage> {
       decoration: BoxDecoration(color: Colors.white, border: Border.all(color: Colors.black, width: 3), borderRadius: BorderRadius.circular(15)),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: _currentStore.photo != null
-            ? Image.memory(base64Decode(_currentStore.photo!.split(',').last), fit: BoxFit.cover)
-            : const Center(child: Text("🧱", style: TextStyle(fontSize: 60))),
+        child: Image.memory(base64Decode(_currentStore.photo.split(',').last), fit: BoxFit.cover)
       ),
     );
   }

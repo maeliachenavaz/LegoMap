@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:image_picker/image_picker.dart'; // Import ajouté
-import 'dart:io'; // Import pour File
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import '../services/StoreService.dart';
-import '../router/Router.dart';
 
 class CreateStorePage extends StatefulWidget {
   const CreateStorePage({super.key});
@@ -17,7 +16,7 @@ class CreateStorePage extends StatefulWidget {
 class _CreateStorePageState extends State<CreateStorePage> {
   final _formKey = GlobalKey<FormState>();
   final StoreService _storeService = StoreService();
-  final ImagePicker _picker = ImagePicker(); // Instance du picker
+  final ImagePicker _picker = ImagePicker();
 
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
@@ -25,18 +24,17 @@ class _CreateStorePageState extends State<CreateStorePage> {
   final TextEditingController _contactEmailController = TextEditingController();
 
   LatLng? _pickedLocation;
-  File? _selectedImage; // Stocke l'image choisie
+  File? _selectedImage;
   bool _isLoading = false;
 
   final Color legoRed = const Color(0xFFD11013);
   final Color legoYellow = const Color(0xFFFACB16);
 
-  // Fonction pour choisir l'image (Source : Caméra ou Galerie)
   Future<void> _pickImage(ImageSource source) async {
     try {
       final XFile? pickedFile = await _picker.pickImage(
         source: source,
-        imageQuality: 70, // Compresse un peu pour éviter les payloads trop lourds
+        imageQuality: 70,
       );
       if (pickedFile != null) {
         setState(() {
@@ -48,7 +46,6 @@ class _CreateStorePageState extends State<CreateStorePage> {
     }
   }
 
-  // Affiche un menu pour choisir la source de l'image
   void _showImageSourceActionSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -142,7 +139,7 @@ class _CreateStorePageState extends State<CreateStorePage> {
       backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
         backgroundColor: legoYellow,
-        title: const Text("CONSTRUIRE UN STORE", style: TextStyle(fontWeight: FontWeight.w900)),
+        title: const Text("NOUVEAU STORE", style: TextStyle(fontWeight: FontWeight.w900)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -186,7 +183,6 @@ class _CreateStorePageState extends State<CreateStorePage> {
 
               const SizedBox(height: 20),
 
-              // --- ZONE LOCALISATION ---
               GestureDetector(
                 onTap: _getLocation,
                 child: Container(
