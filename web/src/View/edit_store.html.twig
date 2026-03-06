@@ -30,6 +30,7 @@
         {% endif %}
 
         <form method="POST" enctype="multipart/form-data" class="space-y-6">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
             <div>
                 <label for="nom" class="block font-bold mb-2 text-gray-800">Nom du Store</label>

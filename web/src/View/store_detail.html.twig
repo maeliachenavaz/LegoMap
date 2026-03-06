@@ -12,8 +12,6 @@
             outline: 3px solid #1a365d !important;
             outline-offset: 2px;
         }
-        /* Masquer la carte pour les lecteurs d'écran si nécessaire,
-           mais ici on va plutôt l'étiqueter correctement */
         #map { z-index: 1; }
     </style>
 </head>
@@ -96,6 +94,7 @@
 
                 <form method="POST" action="/store/{{ store.id }}/delete"
                       onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer définitivement le store {{ store.nom }} ?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                     <button type="submit"
                             class="bg-red-800 text-white font-bold px-6 py-3 rounded-xl hover:bg-red-900 transition shadow-md focus:ring-4 focus:ring-red-300">
                         Supprimer le store
@@ -115,9 +114,8 @@
     const lat = {{ store.latitude }};
     const lon = {{ store.longitude }};
 
-    // Initialisation de la carte avec une option pour faciliter le focus
     const map = L.map('map', {
-        scrollWheelZoom: false // Évite de piéger l'utilisateur qui scrolle la page
+        scrollWheelZoom: false
     }).setView([lat, lon], 14);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

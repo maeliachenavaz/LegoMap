@@ -27,6 +27,8 @@
         {% endif %}
 
         <form method="POST" class="space-y-5">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
             <div>
                 <label for="name" class="block font-bold text-gray-900 mb-1">Nom complet</label>
                 <input type="text" id="name" name="name"

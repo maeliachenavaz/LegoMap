@@ -7,6 +7,8 @@ class StoreController extends BaseController
     public function create(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->checkCsrf();
+
             $photoBase64 = null;
             if (!empty($_FILES['photo']['tmp_name'])) {
                 $photoBase64 = base64_encode(file_get_contents($_FILES['photo']['tmp_name']));
@@ -61,6 +63,8 @@ class StoreController extends BaseController
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->checkCsrf();
+
             $photoBase64 = $store['photo'] ?? null;
             if (!empty($_FILES['photo']['tmp_name'])) {
                 $photoBase64 = base64_encode(file_get_contents($_FILES['photo']['tmp_name']));
@@ -81,6 +85,7 @@ class StoreController extends BaseController
             $result = $this->callApi("http://api/stores/$id", 'PUT', $data);
 
             if (isset($result['id']) || !isset($result['error'])) {
+                unset($_SESSION['cached_stores']);
                 header("Location: /store/$id");
                 exit;
             }
@@ -97,9 +102,12 @@ class StoreController extends BaseController
 
     public function delete(string $id): void
     {
+        $this->checkCsrf();
+
         $result = $this->callApi("http://api/stores/$id", 'DELETE');
 
         if (!isset($result['error'])) {
+            unset($_SESSION['cached_stores']);
             header('Location: /');
             exit;
         }

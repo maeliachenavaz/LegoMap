@@ -82,12 +82,17 @@ class __TwigTemplate_3f899298e52851a6e0e27060389a9d43 extends Template
         // line 28
         yield "
         <form method=\"POST\" class=\"space-y-5\">
+            <input type=\"hidden\" name=\"csrf_token\" value=\"";
+        // line 30
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["csrf_token"] ?? null), "html", null, true);
+        yield "\">
+
             <div>
                 <label for=\"name\" class=\"block font-bold text-gray-900 mb-1\">Nom complet</label>
                 <input type=\"text\" id=\"name\" name=\"name\"
                        value=\"";
-        // line 33
-        yield (((CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "name", [], "any", true, true, false, 33) &&  !(null === CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "name", [], "any", false, false, false, 33)))) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "name", [], "any", false, false, false, 33), "html", null, true)) : (""));
+        // line 35
+        yield (((CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "name", [], "any", true, true, false, 35) &&  !(null === CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "name", [], "any", false, false, false, 35)))) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "name", [], "any", false, false, false, 35), "html", null, true)) : (""));
         yield "\" required
                        aria-required=\"true\"
                        class=\"w-full p-3 border-2 border-gray-400 rounded-xl focus:border-red-700 outline-none transition-colors\">
@@ -97,17 +102,17 @@ class __TwigTemplate_3f899298e52851a6e0e27060389a9d43 extends Template
                 <label for=\"email\" class=\"block font-bold text-gray-900 mb-1\">Adresse Email</label>
                 <input type=\"email\" id=\"email\" name=\"email\"
                        value=\"";
-        // line 41
-        yield (((CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "email", [], "any", true, true, false, 41) &&  !(null === CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "email", [], "any", false, false, false, 41)))) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "email", [], "any", false, false, false, 41), "html", null, true)) : (""));
+        // line 43
+        yield (((CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "email", [], "any", true, true, false, 43) &&  !(null === CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "email", [], "any", false, false, false, 43)))) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "email", [], "any", false, false, false, 43), "html", null, true)) : (""));
         yield "\" required
                        aria-required=\"true\"
                        class=\"w-full p-3 border-2 border-gray-400 rounded-xl focus:border-red-700 outline-none transition-colors\">
             </div>
 
             ";
-        // line 46
+        // line 48
         if ((($tmp =  !($context["user"] ?? null)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 47
+            // line 49
             yield "                <div>
                     <label for=\"password\" class=\"block font-bold text-gray-900 mb-1\">Mot de passe</label>
                     <input type=\"password\" id=\"password\" name=\"password\"
@@ -117,13 +122,13 @@ class __TwigTemplate_3f899298e52851a6e0e27060389a9d43 extends Template
                 </div>
             ";
         } else {
-            // line 55
+            // line 57
             yield "                <div class=\"bg-blue-50 p-3 rounded-lg border border-blue-200\">
                     <p class=\"text-sm text-blue-800\">Laissez les champs tels quels pour conserver les informations actuelles.</p>
                 </div>
             ";
         }
-        // line 59
+        // line 61
         yield "
             <div class=\"flex flex-col sm:flex-row gap-4 pt-4\">
                 <button type=\"submit\"
@@ -165,7 +170,7 @@ class __TwigTemplate_3f899298e52851a6e0e27060389a9d43 extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  127 => 59,  121 => 55,  111 => 47,  109 => 46,  101 => 41,  90 => 33,  83 => 28,  77 => 25,  73 => 23,  71 => 22,  66 => 20,  48 => 5,  42 => 1,);
+        return array (  132 => 61,  126 => 57,  116 => 49,  114 => 48,  106 => 43,  95 => 35,  87 => 30,  83 => 28,  77 => 25,  73 => 23,  71 => 22,  66 => 20,  48 => 5,  42 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -199,6 +204,8 @@ class __TwigTemplate_3f899298e52851a6e0e27060389a9d43 extends Template
         {% endif %}
 
         <form method=\"POST\" class=\"space-y-5\">
+            <input type=\"hidden\" name=\"csrf_token\" value=\"{{ csrf_token }}\">
+
             <div>
                 <label for=\"name\" class=\"block font-bold text-gray-900 mb-1\">Nom complet</label>
                 <input type=\"text\" id=\"name\" name=\"name\"

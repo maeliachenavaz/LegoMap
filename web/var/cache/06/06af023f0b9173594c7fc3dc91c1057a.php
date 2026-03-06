@@ -56,8 +56,6 @@ class __TwigTemplate_c38933fb96fcdfb57c4d7ebc287d751b extends Template
             outline: 3px solid #1a365d !important;
             outline-offset: 2px;
         }
-        /* Masquer la carte pour les lecteurs d'écran si nécessaire,
-           mais ici on va plutôt l'étiqueter correctement */
         #map { z-index: 1; }
     </style>
 </head>
@@ -82,37 +80,37 @@ class __TwigTemplate_c38933fb96fcdfb57c4d7ebc287d751b extends Template
 
         <div class=\"w-full h-64 overflow-hidden bg-gray-200\">
             ";
-        // line 40
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "photo", [], "any", false, false, false, 40)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 41
+        // line 38
+        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "photo", [], "any", false, false, false, 38)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
+            // line 39
             yield "                <img src=\"";
-            yield (((Twig\Extension\CoreExtension::slice($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "photo", [], "any", false, false, false, 41), 0, 5) == "data:")) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "photo", [], "any", false, false, false, 41), "html", null, true)) : ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(("data:image/jpeg;base64," . CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "photo", [], "any", false, false, false, 41)), "html", null, true)));
+            yield (((Twig\Extension\CoreExtension::slice($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "photo", [], "any", false, false, false, 39), 0, 5) == "data:")) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "photo", [], "any", false, false, false, 39), "html", null, true)) : ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(("data:image/jpeg;base64," . CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "photo", [], "any", false, false, false, 39)), "html", null, true)));
             yield "\"
                      alt=\"Photographie de la boutique ";
-            // line 42
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "nom", [], "any", false, false, false, 42), "html", null, true);
+            // line 40
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "nom", [], "any", false, false, false, 40), "html", null, true);
             yield "\"
                      class=\"w-full h-full object-cover\">
             ";
         } else {
-            // line 45
+            // line 43
             yield "                <div class=\"w-full h-full flex items-center justify-center text-gray-500 italic\" aria-hidden=\"true\">
                     Aucune photographie disponible pour ce store
                 </div>
             ";
         }
-        // line 49
+        // line 47
         yield "        </div>
 
         <div class=\"p-6 space-y-6\">
             <header>
                 <h2 class=\"text-3xl font-black text-red-800 mb-2\">";
-        // line 53
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "nom", [], "any", false, false, false, 53), "html", null, true);
+        // line 51
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "nom", [], "any", false, false, false, 51), "html", null, true);
         yield "</h2>
                 <p class=\"text-lg text-gray-700 leading-relaxed\">";
-        // line 54
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "description", [], "any", false, false, false, 54), "html", null, true);
+        // line 52
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "description", [], "any", false, false, false, 52), "html", null, true);
         yield "</p>
             </header>
 
@@ -122,16 +120,16 @@ class __TwigTemplate_c38933fb96fcdfb57c4d7ebc287d751b extends Template
                 <div class=\"flex flex-col border-b border-gray-100 pb-2\">
                     <dt class=\"text-sm font-bold text-gray-500 uppercase tracking-wide\">Date d'ouverture</dt>
                     <dd class=\"text-gray-900 font-medium\">";
-        // line 62
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "date", [], "any", false, false, false, 62), "html", null, true);
+        // line 60
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "date", [], "any", false, false, false, 60), "html", null, true);
         yield "</dd>
                 </div>
                 <div class=\"flex flex-col border-b border-gray-100 pb-2\">
                     <dt class=\"text-sm font-bold text-gray-500 uppercase tracking-wide\">Note des clients</dt>
                     <dd class=\"text-gray-900 font-bold flex items-center gap-1\">
                         <span class=\"text-gray-900 font-medium\">";
-        // line 67
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "avis", [], "any", false, false, false, 67), "html", null, true);
+        // line 65
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "avis", [], "any", false, false, false, 65), "html", null, true);
         yield " / 5</span>
                         <span class=\"text-amber-600 text-2xl\" aria-hidden=\"true\">★</span>
                         <span class=\"sr-only\">étoiles sur 5</span>
@@ -140,14 +138,14 @@ class __TwigTemplate_c38933fb96fcdfb57c4d7ebc287d751b extends Template
                 <div class=\"flex flex-col border-b border-gray-100 pb-2\">
                     <dt class=\"text-sm font-bold text-gray-500 uppercase tracking-wide\">Contact</dt>
                     <dd class=\"text-gray-900 font-medium\">";
-        // line 74
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "contactNom", [], "any", false, false, false, 74), "html", null, true);
+        // line 72
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "contactNom", [], "any", false, false, false, 72), "html", null, true);
         yield "</dd>
                     <dd><a href=\"mailto:";
-        // line 75
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "contactEmail", [], "any", false, false, false, 75), "html", null, true);
+        // line 73
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "contactEmail", [], "any", false, false, false, 73), "html", null, true);
         yield "\" class=\"text-blue-700 hover:underline font-medium\">";
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "contactEmail", [], "any", false, false, false, 75), "html", null, true);
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "contactEmail", [], "any", false, false, false, 73), "html", null, true);
         yield "</a></dd>
                 </div>
             </dl>
@@ -158,8 +156,8 @@ class __TwigTemplate_c38933fb96fcdfb57c4d7ebc287d751b extends Template
                      class=\"w-full h-80 rounded-xl shadow-inner border-2 border-gray-200\"
                      role=\"application\"
                      aria-label=\"Carte interactive affichant l'emplacement du store ";
-        // line 84
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "nom", [], "any", false, false, false, 84), "html", null, true);
+        // line 82
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "nom", [], "any", false, false, false, 82), "html", null, true);
         yield "\">
                 </div>
                 <p class=\"text-xs text-gray-500 mt-2 italic\">
@@ -169,21 +167,25 @@ class __TwigTemplate_c38933fb96fcdfb57c4d7ebc287d751b extends Template
 
             <footer class=\"flex flex-wrap gap-4 mt-8 pt-6 border-t-2 border-gray-100\">
                 <a href=\"/store/";
-        // line 92
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "id", [], "any", false, false, false, 92), "html", null, true);
+        // line 90
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "id", [], "any", false, false, false, 90), "html", null, true);
         yield "/edit\"
                    class=\"bg-blue-700 text-white font-bold px-6 py-3 rounded-xl hover:bg-blue-800 transition shadow-md focus:ring-4 focus:ring-blue-300\">
                     Modifier les informations
                 </a>
 
                 <form method=\"POST\" action=\"/store/";
-        // line 97
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "id", [], "any", false, false, false, 97), "html", null, true);
+        // line 95
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "id", [], "any", false, false, false, 95), "html", null, true);
         yield "/delete\"
                       onsubmit=\"return confirm('Êtes-vous sûr de vouloir supprimer définitivement le store ";
-        // line 98
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "nom", [], "any", false, false, false, 98), "html", null, true);
+        // line 96
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "nom", [], "any", false, false, false, 96), "html", null, true);
         yield " ?');\">
+                    <input type=\"hidden\" name=\"csrf_token\" value=\"";
+        // line 97
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["csrf_token"] ?? null), "html", null, true);
+        yield "\">
                     <button type=\"submit\"
                             class=\"bg-red-800 text-white font-bold px-6 py-3 rounded-xl hover:bg-red-900 transition shadow-md focus:ring-4 focus:ring-red-300\">
                         Supprimer le store
@@ -191,8 +193,8 @@ class __TwigTemplate_c38933fb96fcdfb57c4d7ebc287d751b extends Template
                 </form>
 
                 <a href=\"/store/";
-        // line 105
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "id", [], "any", false, false, false, 105), "html", null, true);
+        // line 104
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "id", [], "any", false, false, false, 104), "html", null, true);
         yield "/pdf\"
                    class=\"bg-gray-800 text-white font-bold px-6 py-3 rounded-xl hover:bg-black transition shadow-md focus:ring-4 focus:ring-gray-400 flex items-center gap-2\">
                     Générer la fiche PDF
@@ -204,17 +206,16 @@ class __TwigTemplate_c38933fb96fcdfb57c4d7ebc287d751b extends Template
 
 <script>
     const lat = ";
-        // line 115
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "latitude", [], "any", false, false, false, 115), "html", null, true);
+        // line 114
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "latitude", [], "any", false, false, false, 114), "html", null, true);
         yield ";
     const lon = ";
-        // line 116
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "longitude", [], "any", false, false, false, 116), "html", null, true);
+        // line 115
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "longitude", [], "any", false, false, false, 115), "html", null, true);
         yield ";
 
-    // Initialisation de la carte avec une option pour faciliter le focus
     const map = L.map('map', {
-        scrollWheelZoom: false // Évite de piéger l'utilisateur qui scrolle la page
+        scrollWheelZoom: false
     }).setView([lat, lon], 14);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -224,8 +225,8 @@ class __TwigTemplate_c38933fb96fcdfb57c4d7ebc287d751b extends Template
 
     const marker = L.marker([lat, lon]).addTo(map)
         .bindPopup(\"<strong>";
-        // line 129
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "nom", [], "any", false, false, false, 129), "html", null, true);
+        // line 127
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "nom", [], "any", false, false, false, 127), "html", null, true);
         yield "</strong><br>Boutique LEGO\")
         .openPopup();
 </script>
@@ -256,7 +257,7 @@ class __TwigTemplate_c38933fb96fcdfb57c4d7ebc287d751b extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  228 => 129,  212 => 116,  208 => 115,  195 => 105,  185 => 98,  181 => 97,  173 => 92,  162 => 84,  148 => 75,  144 => 74,  134 => 67,  126 => 62,  115 => 54,  111 => 53,  105 => 49,  99 => 45,  93 => 42,  88 => 41,  86 => 40,  48 => 5,  42 => 1,);
+        return array (  229 => 127,  214 => 115,  210 => 114,  197 => 104,  187 => 97,  183 => 96,  179 => 95,  171 => 90,  160 => 82,  146 => 73,  142 => 72,  132 => 65,  124 => 60,  113 => 52,  109 => 51,  103 => 47,  97 => 43,  91 => 40,  86 => 39,  84 => 38,  48 => 5,  42 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -275,8 +276,6 @@ class __TwigTemplate_c38933fb96fcdfb57c4d7ebc287d751b extends Template
             outline: 3px solid #1a365d !important;
             outline-offset: 2px;
         }
-        /* Masquer la carte pour les lecteurs d'écran si nécessaire,
-           mais ici on va plutôt l'étiqueter correctement */
         #map { z-index: 1; }
     </style>
 </head>
@@ -359,6 +358,7 @@ class __TwigTemplate_c38933fb96fcdfb57c4d7ebc287d751b extends Template
 
                 <form method=\"POST\" action=\"/store/{{ store.id }}/delete\"
                       onsubmit=\"return confirm('Êtes-vous sûr de vouloir supprimer définitivement le store {{ store.nom }} ?');\">
+                    <input type=\"hidden\" name=\"csrf_token\" value=\"{{ csrf_token }}\">
                     <button type=\"submit\"
                             class=\"bg-red-800 text-white font-bold px-6 py-3 rounded-xl hover:bg-red-900 transition shadow-md focus:ring-4 focus:ring-red-300\">
                         Supprimer le store
@@ -378,9 +378,8 @@ class __TwigTemplate_c38933fb96fcdfb57c4d7ebc287d751b extends Template
     const lat = {{ store.latitude }};
     const lon = {{ store.longitude }};
 
-    // Initialisation de la carte avec une option pour faciliter le focus
     const map = L.map('map', {
-        scrollWheelZoom: false // Évite de piéger l'utilisateur qui scrolle la page
+        scrollWheelZoom: false
     }).setView([lat, lon], 14);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

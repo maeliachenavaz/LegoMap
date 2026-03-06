@@ -50,6 +50,8 @@ class UserController extends BaseController
     public function create(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->checkCsrf();
+
             $data = [
                 'name'     => $_POST['name'] ?? '',
                 'email'    => $_POST['email'] ?? '',
@@ -83,6 +85,8 @@ class UserController extends BaseController
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->checkCsrf();
+
             $data = [
                 'name'  => $_POST['name'] ?? '',
                 'email' => $_POST['email'] ?? ''
@@ -115,14 +119,14 @@ class UserController extends BaseController
 
     public function delete(string $id): void
     {
+        $this->checkCsrf();
+
         $result = $this->callApi("http://api/users/$id", 'DELETE');
 
         if (!isset($result['error'])) {
-            http_response_code(200);
-            echo json_encode(['message' => 'Utilisateur supprimé']);
+            header('Location: /users');
         } else {
-            http_response_code(400);
-            echo json_encode(['error' => $result['error']]);
+            header('Location: /users?error=' . urlencode($result['error']));
         }
         exit;
     }

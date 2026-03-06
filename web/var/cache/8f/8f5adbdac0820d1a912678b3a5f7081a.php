@@ -32,7 +32,6 @@ class __TwigTemplate_37596a590a792be25352fe955cc8eb30 extends Template
         $this->blocks = [
             'title' => [$this, 'block_title'],
             'body' => [$this, 'block_body'],
-            'javascripts' => [$this, 'block_javascripts'],
         ];
     }
 
@@ -123,27 +122,33 @@ class __TwigTemplate_37596a590a792be25352fe955cc8eb30 extends Template
             yield "\">
                                 Modifier
                             </a>
-                            <button onclick=\"deleteUser('";
-            // line 42
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["user"], "id", [], "any", false, false, false, 42), "html", null, true);
-            yield "', '";
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["user"], "name", [], "any", false, false, false, 42), "html", null, true);
-            yield "')\"
-                                    class=\"bg-red-700 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-900 transition shadow-sm border-2 border-transparent focus:ring-2 focus:ring-red-400\"
-                                    aria-label=\"Supprimer l'utilisateur ";
+
+                            <form action=\"/users/delete/";
+            // line 43
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["user"], "id", [], "any", false, false, false, 43), "html", null, true);
+            yield "\" method=\"POST\" class=\"inline-block\"
+                                  onsubmit=\"return confirm('Attention : Vous allez supprimer l\\'utilisateur ";
             // line 44
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["user"], "name", [], "any", false, false, false, 44), "html", null, true);
+            yield ". Cette action est irréversible. Voulez-vous continuer ?');\">
+                                <input type=\"hidden\" name=\"csrf_token\" value=\"";
+            // line 45
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["csrf_token"] ?? null), "html", null, true);
             yield "\">
-                                Supprimer
-                            </button>
+
+                                <button type=\"submit\"
+                                        class=\"bg-red-700 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-900 transition shadow-sm border-2 border-transparent focus:ring-2 focus:ring-red-400\">
+                                    Supprimer
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 ";
             $context['_iterated'] = true;
         }
-        // line 49
+        // line 54
         if (!$context['_iterated']) {
-            // line 50
+            // line 55
             yield "                    <tr>
                         <td colspan=\"3\" class=\"p-12 text-center text-gray-600 italic bg-gray-50\">
                             Aucun utilisateur trouvé.
@@ -154,52 +159,11 @@ class __TwigTemplate_37596a590a792be25352fe955cc8eb30 extends Template
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_key'], $context['user'], $context['_parent'], $context['_iterated']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 56
+        // line 61
         yield "                </tbody>
             </table>
         </div>
     </div>
-";
-        yield from [];
-    }
-
-    // line 62
-    /**
-     * @return iterable<null|scalar|\Stringable>
-     */
-    public function block_javascripts(array $context, array $blocks = []): iterable
-    {
-        $macros = $this->macros;
-        // line 63
-        yield "    <script>
-        /**
-         * Logique de suppression d'un utilisateur
-         * @param {string} id - L'identifiant de l'utilisateur
-         * @param {string} name - Le nom pour la confirmation
-         */
-        async function deleteUser(id, name) {
-            if (!confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur \"\${name}\" ? Cette action est irréversible.`)) {
-                return;
-            }
-
-            try {
-                const response = await fetch(`/users/delete/\${id}`, {
-                    method: 'DELETE'
-                });
-
-                if (response.ok) {
-                    // On recharge pour mettre à jour la liste
-                    window.location.reload();
-                } else {
-                    const errorData = await response.json();
-                    alert(\"Erreur : \" + (errorData.error || \"Impossible de supprimer l'utilisateur.\"));
-                }
-            } catch (error) {
-                console.error(\"Erreur réseau :\", error);
-                alert(\"Erreur de connexion au serveur.\");
-            }
-        }
-    </script>
 ";
         yield from [];
     }
@@ -225,7 +189,7 @@ class __TwigTemplate_37596a590a792be25352fe955cc8eb30 extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  174 => 63,  167 => 62,  158 => 56,  147 => 50,  145 => 49,  135 => 44,  128 => 42,  122 => 39,  117 => 37,  112 => 35,  108 => 34,  105 => 33,  100 => 32,  86 => 20,  73 => 8,  71 => 7,  64 => 6,  53 => 4,  42 => 2,);
+        return array (  163 => 61,  152 => 55,  150 => 54,  136 => 45,  132 => 44,  128 => 43,  121 => 39,  116 => 37,  111 => 35,  107 => 34,  104 => 33,  99 => 32,  85 => 20,  72 => 8,  70 => 7,  63 => 6,  52 => 4,  41 => 2,);
     }
 
     public function getSourceContext(): Source
@@ -271,11 +235,16 @@ class __TwigTemplate_37596a590a792be25352fe955cc8eb30 extends Template
                                aria-label=\"Modifier l'utilisateur {{ user.name }}\">
                                 Modifier
                             </a>
-                            <button onclick=\"deleteUser('{{ user.id }}', '{{ user.name }}')\"
-                                    class=\"bg-red-700 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-900 transition shadow-sm border-2 border-transparent focus:ring-2 focus:ring-red-400\"
-                                    aria-label=\"Supprimer l'utilisateur {{ user.name }}\">
-                                Supprimer
-                            </button>
+
+                            <form action=\"/users/delete/{{ user.id }}\" method=\"POST\" class=\"inline-block\"
+                                  onsubmit=\"return confirm('Attention : Vous allez supprimer l\\'utilisateur {{ user.name }}. Cette action est irréversible. Voulez-vous continuer ?');\">
+                                <input type=\"hidden\" name=\"csrf_token\" value=\"{{ csrf_token }}\">
+
+                                <button type=\"submit\"
+                                        class=\"bg-red-700 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-900 transition shadow-sm border-2 border-transparent focus:ring-2 focus:ring-red-400\">
+                                    Supprimer
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 {% else %}
@@ -290,37 +259,6 @@ class __TwigTemplate_37596a590a792be25352fe955cc8eb30 extends Template
         </div>
     </div>
 {% endblock %}
-
-{% block javascripts %}
-    <script>
-        /**
-         * Logique de suppression d'un utilisateur
-         * @param {string} id - L'identifiant de l'utilisateur
-         * @param {string} name - Le nom pour la confirmation
-         */
-        async function deleteUser(id, name) {
-            if (!confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur \"\${name}\" ? Cette action est irréversible.`)) {
-                return;
-            }
-
-            try {
-                const response = await fetch(`/users/delete/\${id}`, {
-                    method: 'DELETE'
-                });
-
-                if (response.ok) {
-                    // On recharge pour mettre à jour la liste
-                    window.location.reload();
-                } else {
-                    const errorData = await response.json();
-                    alert(\"Erreur : \" + (errorData.error || \"Impossible de supprimer l'utilisateur.\"));
-                }
-            } catch (error) {
-                console.error(\"Erreur réseau :\", error);
-                alert(\"Erreur de connexion au serveur.\");
-            }
-        }
-    </script>
-{% endblock %}", "users.html.twig", "/var/www/html/src/View/users.html.twig");
+", "users.html.twig", "/var/www/html/src/View/users.html.twig");
     }
 }

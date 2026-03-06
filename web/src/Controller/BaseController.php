@@ -4,6 +4,32 @@ namespace App\Controller;
 
 abstract class BaseController extends TwigController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+
+        $this->twig->addGlobal('csrf_token', $_SESSION['csrf_token']);
+    }
+
+    protected function checkCsrf(): void
+    {
+        $token = $_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? null;
+
+        if (!$token || $token !== $_SESSION['csrf_token']) {
+            http_response_code(403);
+            echo "Erreur de sécurité : Jeton CSRF invalide.";
+            exit;
+        }
+    }
+
     /**
      * @param array<string, mixed>|null $data
      * @return mixed

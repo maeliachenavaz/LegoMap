@@ -82,14 +82,18 @@ class __TwigTemplate_a62cc698a1d32ec416f192e85790b9b8 extends Template
         // line 31
         yield "
         <form method=\"POST\" enctype=\"multipart/form-data\" class=\"space-y-6\">
+            <input type=\"hidden\" name=\"csrf_token\" value=\"";
+        // line 33
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["csrf_token"] ?? null), "html", null, true);
+        yield "\">
 
             <div>
                 <label for=\"nom\" class=\"block font-bold mb-2 text-gray-800\">Nom du Store</label>
                 <input type=\"text\" id=\"nom\" name=\"nom\" required
                        class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none\"
                        value=\"";
-        // line 38
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "nom", [], "any", false, false, false, 38), "html", null, true);
+        // line 39
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "nom", [], "any", false, false, false, 39), "html", null, true);
         yield "\">
             </div>
 
@@ -97,8 +101,8 @@ class __TwigTemplate_a62cc698a1d32ec416f192e85790b9b8 extends Template
                 <label for=\"description\" class=\"block font-bold mb-2 text-gray-800\">Description</label>
                 <textarea id=\"description\" name=\"description\" required
                           class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none min-h-[100px]\">";
-        // line 44
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "description", [], "any", false, false, false, 44), "html", null, true);
+        // line 45
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "description", [], "any", false, false, false, 45), "html", null, true);
         yield "</textarea>
             </div>
 
@@ -108,8 +112,8 @@ class __TwigTemplate_a62cc698a1d32ec416f192e85790b9b8 extends Template
                     <input type=\"date\" id=\"date\" name=\"date\" required
                            class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none\"
                            value=\"";
-        // line 52
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "date", [], "any", false, false, false, 52), "html", null, true);
+        // line 53
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "date", [], "any", false, false, false, 53), "html", null, true);
         yield "\">
                 </div>
 
@@ -118,8 +122,8 @@ class __TwigTemplate_a62cc698a1d32ec416f192e85790b9b8 extends Template
                     <input type=\"number\" id=\"avis\" name=\"avis\" min=\"0\" max=\"5\" required
                            class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none\"
                            value=\"";
-        // line 59
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "avis", [], "any", false, false, false, 59), "html", null, true);
+        // line 60
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "avis", [], "any", false, false, false, 60), "html", null, true);
         yield "\">
                 </div>
             </div>
@@ -137,20 +141,20 @@ class __TwigTemplate_a62cc698a1d32ec416f192e85790b9b8 extends Template
                     </button>
                     <p class=\"font-mono text-sm\" id=\"coords-status\" aria-live=\"polite\">
                         <span id=\"coords-display\">";
-        // line 75
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "latitude", [], "any", false, false, false, 75), "html", null, true);
+        // line 76
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "latitude", [], "any", false, false, false, 76), "html", null, true);
         yield ", ";
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "longitude", [], "any", false, false, false, 75), "html", null, true);
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "longitude", [], "any", false, false, false, 76), "html", null, true);
         yield "</span>
                     </p>
                 </div>
                 <input type=\"hidden\" name=\"latitude\" id=\"latitude\" value=\"";
-        // line 78
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "latitude", [], "any", false, false, false, 78), "html", null, true);
+        // line 79
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "latitude", [], "any", false, false, false, 79), "html", null, true);
         yield "\">
                 <input type=\"hidden\" name=\"longitude\" id=\"longitude\" value=\"";
-        // line 79
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "longitude", [], "any", false, false, false, 79), "html", null, true);
+        // line 80
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "longitude", [], "any", false, false, false, 80), "html", null, true);
         yield "\">
             </fieldset>
 
@@ -160,8 +164,8 @@ class __TwigTemplate_a62cc698a1d32ec416f192e85790b9b8 extends Template
                     <input type=\"text\" id=\"contactNom\" name=\"contactNom\" required
                            class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none\"
                            value=\"";
-        // line 87
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "contactNom", [], "any", false, false, false, 87), "html", null, true);
+        // line 88
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "contactNom", [], "any", false, false, false, 88), "html", null, true);
         yield "\">
                 </div>
                 <div>
@@ -169,8 +173,8 @@ class __TwigTemplate_a62cc698a1d32ec416f192e85790b9b8 extends Template
                     <input type=\"email\" id=\"contactEmail\" name=\"contactEmail\" required
                            class=\"w-full border-2 border-gray-400 rounded-xl px-4 py-3 focus:border-red-700 outline-none\"
                            value=\"";
-        // line 93
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "contactEmail", [], "any", false, false, false, 93), "html", null, true);
+        // line 94
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "contactEmail", [], "any", false, false, false, 94), "html", null, true);
         yield "\">
                 </div>
             </div>
@@ -180,22 +184,22 @@ class __TwigTemplate_a62cc698a1d32ec416f192e85790b9b8 extends Template
                 <input type=\"file\" id=\"photo\" name=\"photo\" accept=\"image/*\"
                        class=\"w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-red-50 file:text-red-700 hover:file:bg-red-100\">
                 ";
-        // line 101
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "photo", [], "any", false, false, false, 101)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 102
+        // line 102
+        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "photo", [], "any", false, false, false, 102)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
+            // line 103
             yield "                    <div class=\"mt-4 p-2 border border-gray-200 rounded-lg inline-block\">
                         <img src=\"";
-            // line 103
-            yield (((Twig\Extension\CoreExtension::slice($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "photo", [], "any", false, false, false, 103), 0, 5) == "data:")) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "photo", [], "any", false, false, false, 103), "html", null, true)) : ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(("data:image/jpeg;base64," . CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "photo", [], "any", false, false, false, 103)), "html", null, true)));
+            // line 104
+            yield (((Twig\Extension\CoreExtension::slice($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "photo", [], "any", false, false, false, 104), 0, 5) == "data:")) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "photo", [], "any", false, false, false, 104), "html", null, true)) : ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(("data:image/jpeg;base64," . CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "photo", [], "any", false, false, false, 104)), "html", null, true)));
             yield "\"
                              alt=\"Actuelle : ";
-            // line 104
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "nom", [], "any", false, false, false, 104), "html", null, true);
+            // line 105
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "nom", [], "any", false, false, false, 105), "html", null, true);
             yield "\" class=\"w-32 h-32 object-cover rounded shadow-sm\">
                     </div>
                 ";
         }
-        // line 107
+        // line 108
         yield "            </div>
 
             <div class=\"flex flex-col sm:flex-row gap-4 pt-6 border-t-2 border-gray-100\">
@@ -204,8 +208,8 @@ class __TwigTemplate_a62cc698a1d32ec416f192e85790b9b8 extends Template
                     Enregistrer
                 </button>
                 <a href=\"/store/";
-        // line 114
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "id", [], "any", false, false, false, 114), "html", null, true);
+        // line 115
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["store"] ?? null), "id", [], "any", false, false, false, 115), "html", null, true);
         yield "\"
                    class=\"flex-1 bg-gray-200 text-gray-700 text-center font-bold py-4 rounded-xl hover:bg-gray-300 transition flex items-center justify-center border-2 border-transparent focus:ring-4 focus:ring-gray-400\">
                     Annuler
@@ -274,7 +278,7 @@ class __TwigTemplate_a62cc698a1d32ec416f192e85790b9b8 extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  208 => 114,  199 => 107,  193 => 104,  189 => 103,  186 => 102,  184 => 101,  173 => 93,  164 => 87,  153 => 79,  149 => 78,  141 => 75,  122 => 59,  112 => 52,  101 => 44,  92 => 38,  83 => 31,  77 => 28,  73 => 26,  71 => 25,  48 => 5,  42 => 1,);
+        return array (  212 => 115,  203 => 108,  197 => 105,  193 => 104,  190 => 103,  188 => 102,  177 => 94,  168 => 88,  157 => 80,  153 => 79,  145 => 76,  126 => 60,  116 => 53,  105 => 45,  96 => 39,  87 => 33,  83 => 31,  77 => 28,  73 => 26,  71 => 25,  48 => 5,  42 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -311,6 +315,7 @@ class __TwigTemplate_a62cc698a1d32ec416f192e85790b9b8 extends Template
         {% endif %}
 
         <form method=\"POST\" enctype=\"multipart/form-data\" class=\"space-y-6\">
+            <input type=\"hidden\" name=\"csrf_token\" value=\"{{ csrf_token }}\">
 
             <div>
                 <label for=\"nom\" class=\"block font-bold mb-2 text-gray-800\">Nom du Store</label>

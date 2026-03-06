@@ -39,11 +39,16 @@
                                aria-label="Modifier l'utilisateur {{ user.name }}">
                                 Modifier
                             </a>
-                            <button onclick="deleteUser('{{ user.id }}', '{{ user.name }}')"
-                                    class="bg-red-700 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-900 transition shadow-sm border-2 border-transparent focus:ring-2 focus:ring-red-400"
-                                    aria-label="Supprimer l'utilisateur {{ user.name }}">
-                                Supprimer
-                            </button>
+
+                            <form action="/users/delete/{{ user.id }}" method="POST" class="inline-block"
+                                  onsubmit="return confirm('Attention : Vous allez supprimer l\'utilisateur {{ user.name }}. Cette action est irréversible. Voulez-vous continuer ?');">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+                                <button type="submit"
+                                        class="bg-red-700 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-900 transition shadow-sm border-2 border-transparent focus:ring-2 focus:ring-red-400">
+                                    Supprimer
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 {% else %}
@@ -57,36 +62,4 @@
             </table>
         </div>
     </div>
-{% endblock %}
-
-{% block javascripts %}
-    <script>
-        /**
-         * Logique de suppression d'un utilisateur
-         * @param {string} id - L'identifiant de l'utilisateur
-         * @param {string} name - Le nom pour la confirmation
-         */
-        async function deleteUser(id, name) {
-            if (!confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur "${name}" ? Cette action est irréversible.`)) {
-                return;
-            }
-
-            try {
-                const response = await fetch(`/users/delete/${id}`, {
-                    method: 'DELETE'
-                });
-
-                if (response.ok) {
-                    // On recharge pour mettre à jour la liste
-                    window.location.reload();
-                } else {
-                    const errorData = await response.json();
-                    alert("Erreur : " + (errorData.error || "Impossible de supprimer l'utilisateur."));
-                }
-            } catch (error) {
-                console.error("Erreur réseau :", error);
-                alert("Erreur de connexion au serveur.");
-            }
-        }
-    </script>
 {% endblock %}
